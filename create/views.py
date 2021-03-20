@@ -21,7 +21,7 @@ def creation_dem1(request):
             return render(request, 'create_demand.html', {'OFId': 1003211, 'bas': aa,'bb':bb, 'cc':cc})
 
         else:
-            return render(request, 'create_demand.html', {'OFId': 1003211, 'nums':nums})
+            return render(request, 'create_demand.html', {'OFId': 1003211})
 
 
 

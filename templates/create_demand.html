@@ -20,6 +20,7 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
 
 
@@ -75,37 +76,25 @@
 
 
                                 <br>
-                                <table class="table table-sm">
+                                <table class="test table table-sm">
                                     <thead>
                                         <tr>
                                             <th scope="col">Index</th>
                                             <th scope="col">Product ID</th>
                                             <th scope="col">Designation</th>
                                             <th scope="col">Quantity</th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="detail">
                                     <tr>
-                                        <th scope="row">1</th>
-                                            <td>{{bas}}</td>
+                                            <td class="count" scope="row"></td>
+                                            <td>{{aa}}</td>
                                             <td>{{bb}}</td>
                                             <td>{{cc}}</td>
-                                            <td><input type="button" class="btn btn-outline-primary" value="Delete Row" onclick="deleteRow(this)" </td>
+                                            <td><input type="button" class="btn btn-outline-primary" value="Delete Row" id="remove"> </td>
                                     </tr>
-                                    {% for i in nums %}
-                                    <tr>
-                                        <th scope="row">{{i}}</th>
-                                            <td>a</td>
-                                            <td>a</td>
-                                            <td>a</td>
-                                    </tr>
-                                    <tr>
-                                    {% endfor %}
 
-                                        <th scope="row">3</th>
-                                            <td colspan="2"></td>
-                                            <td></td>
-                                    </tr>
                                     </tbody>
                                 </table>
                                 <div class="row">
@@ -126,7 +115,7 @@
 
                                 <hr>
 
-                            </form>
+
 
 
 
@@ -163,8 +152,10 @@
                             <input class="form-control form-control-user" type="text" name="desig" id="desig">
                           </div>
                       </div> <br>
-                        <button class="btn btn-success btn-icon-split " type="submit" value="Submit" style="width:30%">Add</button>
+                      <div class="row">
+                        <button class="btn btn-success btn-icon-split " type="submit" value="Submit" id="addrow" style="width:30%">Add</button>
                         <button class="btn btn-dark btn-icon-split " type="submit" value="Submit" style="width:30%">Cancel</button>
+                      </div>
 
                   </form>
               </div>
@@ -179,6 +170,8 @@
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin-2.min.js'%}"></script>
     <script src="{% static 'js/popupform.js'%}"></script>
+    <script src="{% static 'js/dynamictable.js'%}"></script>
+
 </body>
 
 
