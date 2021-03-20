@@ -1,9 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
+{{bas}}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -60,6 +59,7 @@
                                 <h1 class="h4 text-gray-900 font-weight-bold mb-4">Create a manufacturing order</h1>
 
                             </div>
+                            {% csrf_token %}
                             <form class="user">
                                 <div class="form-group row">
 
@@ -87,18 +87,21 @@
                                     <tbody>
                                     <tr>
                                         <th scope="row">1</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>{{bas}}</td>
+                                            <td>{{bb}}</td>
+                                            <td>{{cc}}</td>
                                             <td><input type="button" class="btn btn-outline-primary" value="Delete Row" onclick="deleteRow(this)" </td>
                                     </tr>
+                                    {% for i in nums %}
                                     <tr>
-                                        <th scope="row">2</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                        <th scope="row">{{i}}</th>
+                                            <td>a</td>
+                                            <td>a</td>
+                                            <td>a</td>
                                     </tr>
                                     <tr>
+                                    {% endfor %}
+
                                         <th scope="row">3</th>
                                             <td colspan="2"></td>
                                             <td></td>
@@ -137,24 +140,27 @@
           <div class="bg-modal">
               <div class="modal-content">
                   <div class="close">+</div>
-                  <form action="">
+                  {% csrf_token %}
+                  <form id="radh"action='test' method="POST">
+                      {% csrf_token %}
                       <div class="col-auto">
                           <div class="form-group">
                             <div class="form-row">
 
                                 <div class="col">
-                                    <label for="qty">Quantity:</label>
-                                    <input class="form-control form-control-user" type="number" min="0" id="qty">
+                                    <label for="quantity">Quantity:</label>
+                                      {% csrf_token %}
+                                    <input class="form-control form-control-user" type="number" min="0" name="quantity" id="quantity">
                                 </div>
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="ref">Reference:</label>
-                            <input class="form-control form-control-user" type="text" id="ref">
+                            <input class="form-control form-control-user" type="text" name="ref" id="ref">
                           </div>
                           <div class="form-group">
                             <label for="desig">Designation:</label>
-                            <input class="form-control form-control-user" type="text" id="desig">
+                            <input class="form-control form-control-user" type="text" name="desig" id="desig">
                           </div>
                       </div> <br>
                         <button class="btn btn-success btn-icon-split " type="submit" value="Submit" style="width:30%">Add</button>
