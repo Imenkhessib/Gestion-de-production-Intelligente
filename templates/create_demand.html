@@ -2,178 +2,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{{bas}}
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	{{bas}}
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-    <title>MO edit client</title>
+	<title>add items tech dep</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+	<!-- Custom fonts for this template-->
+	<link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
+	<link
+			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+			rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
+	<!-- Custom styles for this template-->
+	<link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
+	<link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
 
 
 </head>
 
 <body class="bg-gradient-secondary">
 
-    <div class="container">
+<div class="container">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                       <ul class="nav justify-content-end nav-pills nav-fill">
-                    <li class="nav-item">
+	<div class="card o-hidden border-0 shadow-lg my-5">
+		<div class="card-body p-0">
+			<ul class="nav justify-content-end nav-pills nav-fill">
+				<li class="nav-item">
+					<a class="nav-link bg-primary active" href="{% url 'create_dem' %}">
+						<img src="{% static 'img/developer.svg'%}" width="30" height="30" alt="">Technical
+						department</a>
+				</li>
 
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'create_at' %}">Workshop Chief</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'create_prod' %}">Production Manager</a>
+				</li>
 
-                        <a class="nav-link bg-primary active" href="{% url 'create_dem' %}">
-                            <img src="{% static 'img/developer.svg'%}" width="30" height="30" alt="">Technical department
+			</ul>
+			<!-- Nested Row within Card Body -->
+			<div>
 
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_prod' %}">Production manager</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_at' %}">Workshop Chief</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                </ul>
-                <!-- Nested Row within Card Body -->
-                <div >
+				<div>
+					<div class="p-5">
+						<div class="text-center">
+							<h1 class="h4 text-gray-900 font-weight-bold mb-4">Add items to manufacturing order</h1>
 
-                    <div >
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 font-weight-bold mb-4">Create a manufacturing order</h1>
+						</div>
 
-                            </div>
-                            {% csrf_token %}
-                            <form class="user">
-                                <div class="form-group row">
+						<div>
 
-                                    <div class="col-sm-6">
-                                        <label class=" h5 font-weight-bold" >Manufacturing Order</label>
-                                        <h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
-                                    </div>
-                                </div>
-                            <div class="form-group row">
-                            <a class="btn btn-outline-primary" href="#" id="add" class="button">Add item</a>
-                            </div>
+							<div class="col-sm-6">
+								<label class=" h5 font-weight-bold">Manufacturing Order</label>
+								<h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
+							</div>
+						</div>
+						<div>
+							<a class="btn btn-outline-primary" href="#" id="add">Add item</a>
+						</div>
 
 
+						<br>
+						<table class="test table table-sm">
+							<thead>
+							<tr>
+								<th scope="col">Index</th>
+								<th scope="col">Product ID</th>
+								<th scope="col">Designation</th>
+								<th scope="col">Quantity</th>
+								<th scope="col"></th>
+							</tr>
+							</thead>
+							<tbody class="detail">
+							<tr>
+								<td class="count"></td>
+								<td>{{ref}}</td>
+								<td>{{desig}}</td>
+								<td>{{qty}}</td>
+								<td><input type="button" class="btn btn-outline-primary" id="remove" value="Delete Row">
+								</td>
+							</tr>
 
-                                <br>
-                                <table class="test table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Index</th>
-                                            <th scope="col">Product ID</th>
-                                            <th scope="col">Designation</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="detail">
-                                    <tr>
-                                            <td class="count" scope="row"></td>
-                                            <td>{{aa}}</td>
-                                            <td>{{bb}}</td>
-                                            <td>{{cc}}</td>
-                                            <td><input type="button" class="btn btn-outline-primary" value="Delete Row" id="remove"> </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-                                <div class="row">
-                                    <div class="col text-right col-sm-6">
-                                    <button class="btn btn-success btn-icon-split btn-block" type="submit" value="Submit" style="width:30%">Edit</button>
-                                    </div>
-                                    <div class="col text-left col-sm-6">
-                                    <button class="btn btn-dark btn-icon-split  btn-block" type="submit" value="Submit" style="width:30%">Cancel</button>
-                                    </div>
-                                </div>
-
-
-
-
-                              <!--  <a href="index.html" class="btn btn-primary btn-user btn-block">
-                                    Create
-                                </a> -->
-
-                                <hr>
+							</tbody>
+						</table>
+						<div class="row">
+							<div class="col text-right col-sm-6">
+								<button class="btn btn-success btn-icon-split btn-block" type="submit" value="Submit"
+								        style="width:30%">Edit
+								</button>
+							</div>
+							<div class="col text-left col-sm-6">
+								<button class="btn btn-dark btn-icon-split  btn-block" type="submit" value="Submit"
+								        style="width:30%">Cancel
+								</button>
+							</div>
+						</div>
 
 
+						<hr>
 
 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+</div>
+<div class="bg-modal">
+	<div class="modal-content">
+		<div class="close">+</div>
+		{% csrf_token %}
+		<form name="itemform" id="radh" action='test' method="POST">
+			{% csrf_token %}
+			<div class="col-auto">
+				<div class="form-group">
 
-    </div>
-          <div class="bg-modal">
-              <div class="modal-content">
-                  <div class="close">+</div>
-                  {% csrf_token %}
-                  <form id="radh"action='test' method="POST">
-                      {% csrf_token %}
-                      <div class="col-auto">
-                          <div class="form-group">
-                            <div class="form-row">
 
-                                <div class="col">
-                                    <label for="quantity">Quantity:</label>
-                                      {% csrf_token %}
-                                    <input class="form-control form-control-user" type="number" min="0" name="quantity" id="quantity">
-                                </div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label for="ref">Reference:</label>
-                            <input class="form-control form-control-user" type="text" name="ref" id="ref">
-                          </div>
-                          <div class="form-group">
-                            <label for="desig">Designation:</label>
-                            <input class="form-control form-control-user" type="text" name="desig" id="desig">
-                          </div>
-                      </div> <br>
-                      <div class="row">
-                        <button class="btn btn-success btn-icon-split " type="submit" value="Submit" id="addrow" style="width:30%">Add</button>
-                        <button class="btn btn-dark btn-icon-split " type="submit" value="Submit" style="width:30%">Cancel</button>
-                      </div>
+					<label for="ref">Reference:</label>
+					<input class="form-control form-control-user" type="text" name="ref" id="ref">
 
-                  </form>
-              </div>
-          </div>
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+				</div>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/sb-admin-2.min.js'%}"></script>
-    <script src="{% static 'js/popupform.js'%}"></script>
-    <script src="{% static 'js/dynamictable.js'%}"></script>
+				<div class="form-group">
+					<label for="desig">Designation:</label>
+					<input class="form-control form-control-user" type="text" name="desig" id="desig">
+				</div>
+				<div class="col">
+					<label for="quantity">Quantity:</label>
+					{% csrf_token %}
+					<input class="form-control form-control-user" type="number" min="0" name="quantity"
+					       id="quantity">
+				</div>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-success btn-icon-split " type="submit" value="Submit" id="addrow"
+				        style="width:30%">Add
+				</button>
+				<button class="btn btn-dark btn-icon-split " type="submit" value="Submit" style="width:30%">Cancel
+				</button>
+			</div>
+
+		</form>
+	</div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js'%}"></script>
+<script src="{% static 'js/popupform.js'%}"></script>
+<script src="{% static 'js/dynamictable.js'%}"></script>
+<script src="{% static 'js/notnullwarning.js'%}"></script>
+<script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'%}"></script>
 
 </body>
-
 
 
 </html>

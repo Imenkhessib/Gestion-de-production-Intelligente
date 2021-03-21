@@ -20,7 +20,7 @@ $(function()
                           '<td></td>'+
                           '<td></td>'+
                           '<td></td>'+
-                          '<td><input type="button" class="btn btn-outline-primary" id="remove" value="Delete Row"  </td>'+
+                          '<td><input type="button" class="btn btn-outline-primary" id="remove" value="Delete Row" > </td>'+
                   '</tr>'
 		$(".detail").append(tr);
 	}
