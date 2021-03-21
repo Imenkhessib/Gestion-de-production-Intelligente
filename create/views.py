@@ -10,8 +10,7 @@ def creation_at(request):
 
 
 def creation_dem(request):
-    b = 0
-    return render(request, 'create_demand.html', {'OFId': 1003211, 'bas': b})
+    return render(request, 'create_demand.html', {'OFId': 1003211})
 
 
 def creation_dem1(request):
