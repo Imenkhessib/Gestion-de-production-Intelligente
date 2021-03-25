@@ -6,6 +6,7 @@ function addingrow(){
     var cell2desig = row.insertCell ();
     var cell3qty = row.insertCell ();
     var cell4delete = row.insertCell ();
+    var cell5browse = row.insertCell ();
 
     td1.className = "count";
     cell2ref .innerHTML = document.getElementById("ref").value;

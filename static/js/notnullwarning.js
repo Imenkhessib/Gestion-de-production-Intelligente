@@ -6,4 +6,4 @@ $(function validateForm() {
     alert("Reference must be filled out");
     return false;
   }
-}
+});

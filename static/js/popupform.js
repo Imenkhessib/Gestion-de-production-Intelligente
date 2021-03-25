@@ -6,7 +6,11 @@ document.querySelector('.close').addEventListener('click',function(){
 document.querySelector('.bg-modal').style.display= 'none';
 });
 
-document.querySelector('clear').addEventListener('click',function(){
+document.getElementById('clear').addEventListener('click',function(){
+document.querySelector('.bg-modal').style.display= 'none';
+});
+
+document.getElementById('addrow').addEventListener('click',function(){
 document.querySelector('.bg-modal').style.display= 'none';
 });
 

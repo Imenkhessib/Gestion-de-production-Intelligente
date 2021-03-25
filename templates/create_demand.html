@@ -34,7 +34,7 @@
 			<ul class="nav justify-content-end nav-pills nav-fill">
 				<li class="nav-item">
 					<a class="nav-link bg-primary active" href="{% url 'create_dem' %}">
-						<img src="{% static 'img/developer.svg'%}" width="30" height="30" alt="">Technical
+						<img src="{% static 'img/developer.svg'%}" width="30" height="30" alt=""> Technical
 						department</a>
 				</li>
 
@@ -69,19 +69,23 @@
 
 
 						<br>
-						<table class="test table table-sm" id="itemstab">
-							<thead>
-							<tr>
-								<th scope="col" >Index</th>
-								<th scope="col">Product ID</th>
-								<th scope="col">Designation</th>
-								<th scope="col">Quantity</th>
-								<th scope="col"></th>
-							</tr>
-							</thead>
-							<tbody class="detail">
-							</tbody>
-						</table>
+						<!-- table -->
+
+						<div class="table-responsive">
+							<table class="test table table-sm" id="itemstab">
+								<thead>
+								<tr>
+									<th scope="col">Index</th>
+									<th scope="col">Product ID</th>
+									<th scope="col">Designation</th>
+									<th scope="col">Quantity</th>
+									<th scope="col"></th>
+								</tr>
+								</thead>
+								<tbody class="detail">
+								</tbody>
+							</table>
+						</div>
 						<div class="row">
 							<div class="col text-right col-sm-6">
 								<button class="btn btn-success btn-icon-split btn-block" type="submit" value="Submit"
@@ -106,10 +110,13 @@
 	</div>
 
 </div>
+
+<!-- Form -->
+
 <div class="bg-modal">
 	<div class="modal-content">
 		<div class="close">+</div>
-		<form onsubmit="addingrow() ; return false;" name="itemform" id="radh" action='' >
+		<form onsubmit="addingrow() ; return false;" name="itemform" id="radh" action=''>
 			<div class="col-auto">
 				<div class="form-group">
 					<label for="ref">Reference:</label>
@@ -122,12 +129,14 @@
 				</div>
 				<div class="col">
 					<label for="quantity">Quantity:</label>
-					<input class="form-control form-control-user" type="number" min="0" name="quantity" id="quantity" required>
+					<input class="form-control form-control-user" type="number" min="0" name="quantity" id="quantity"
+					       required>
 				</div>
 			</div>
 			<div class="form-group">
 				<input class="btn btn-success btn-icon-split " type="submit" value="Add" id="addrow" style="width:30%"/>
-				<button class="btn btn-dark btn-icon-split " type="reset" value="Reset" id="clear" style="width:30%">Cancel
+				<button class="btn btn-dark btn-icon-split " type="reset" value="Reset" id="clear" style="width:30%">
+					Cancel
 				</button>
 			</div>
 
@@ -145,7 +154,7 @@
 <script src="{% static 'js/sb-admin-2.min.js'%}"></script>
 <script src="{% static 'js/popupform.js'%}"></script>
 <script src="{% static 'js/dynamtab.js'%}"></script>
-<script src="{% static 'js/notnullwarning.js'%}"></script>
+<!-- <script src="{% static 'js/notnullwarning.js'%}"></script> -->
 <script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'%}"></script>
 
 </body>
