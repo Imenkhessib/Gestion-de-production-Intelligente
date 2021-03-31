@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from .forms import AllForm
+from .models import piece
 
 def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
@@ -10,7 +11,18 @@ def creation_at(request):
 
 
 def creation_dem(request):
-    return render(request, 'create_demand.html', {'OFId': 1003211})
+    # if request.method == "POST":
+    print(request.method)
+    form: AllForm = AllForm(request.POST)
+    print(form.errors)
+    if form.is_valid():
+        aa = form.cleaned_data['product_id']
+        bb = form.cleaned_data['designation']
+        cc = form.cleaned_data['quantity']
+        print(" product_id:  ", aa, "\n designation:  ", bb, "\n quantity:  ",  cc)
+        print('ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok')
+        form.save()
+    return render(request, 'create_demand.html', {'OFId': 1003211, 'form': form})
 
 
 def creation_dem1(request):
