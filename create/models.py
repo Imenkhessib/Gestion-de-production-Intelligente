@@ -22,8 +22,10 @@ class MO (models.Model):
     date_cloture_act = models.DateField(default=2020-1-1)
     date_cloture_real = models.DateField(default=2020-1-1)
 
+
 class piece (models.Model):
+    id = models.AutoField(primary_key=True)
     product_id = models.CharField(max_length=50)
-    designation =models.CharField(max_length=50)
+    designation = models.CharField(max_length=50)
     quantity = models.IntegerField()
 

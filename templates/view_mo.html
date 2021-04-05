@@ -1,31 +1,31 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>add items tech dep</title>
+	<title> SMART PLATFORM</title>
 
 	<!-- Custom fonts for this template-->
-	<link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
+	<link href="{% static 'vendor/fontawesome-free/css/all.min.css'%} " rel="stylesheet" type="text/css">
 	<link
-			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+			href="{% static 'https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i'%}"
 			rel="stylesheet">
 
 	<!-- Custom styles for this template-->
 	<link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
 	<link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
-
 
 </head>
 
-<body class="bg-gradient-secondary">
+<body id="page-top">
+
 <!-- Page Wrapper -->
 <div id="wrapper">
 
@@ -71,9 +71,9 @@
 			<div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">Manage MO:</h6>
-					<a class="collapse-item" href="{% url 'view_mo' %}">View</a>
-					<a class="collapse-item active" href="{% url 'create_dem' %}">Create</a>
-					<a class="collapse-item" href="{% url 'edit_dem' %}">Validation cycle</a>
+					<a class="collapse-item active" href="{% url 'view_mo' %}">View</a>
+					<a class="collapse-item" href="{% url 'create_dem' %}">Create</a>
+					<a class="collapse-item" href="{% url 'edit_dem' %}">Edit</a>
 
 				</div>
 			</div>
@@ -149,7 +149,6 @@
 
 
 	</ul>
-
 	<!-- End of Sidebar -->
 
 	<!-- Content Wrapper -->
@@ -157,7 +156,6 @@
 
 		<!-- Main Content -->
 		<div id="content">
-
 
 			<!-- Topbar -->
 			<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -168,13 +166,13 @@
 				</button>
 
 				<!-- Topbar Search -->
-				<form enctype=multipart/form-data
-				      class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+				<form
+						class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 					<div class="input-group">
 						<input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
 						       aria-label="Search" aria-describedby="basic-addon2">
 
-						<div class="input-group-append" style="z-index: 0;">
+						<div class="input-group-append">
 							<button class="btn btn-primary" type="button">
 								<i class="fas fa-search fa-sm"></i>
 							</button>
@@ -195,7 +193,7 @@
 						<!-- Dropdown - Messages -->
 						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
 						     aria-labelledby="searchDropdown">
-							<form class="form-inline mr-auto w-100 navbar-search" enctype=multipart/form-data>
+							<form class="form-inline mr-auto w-100 navbar-search">
 								<div class="input-group">
 									<input type="text" class="form-control bg-light border-0 small"
 									       placeholder="Search for..." aria-label="Search"
@@ -368,180 +366,125 @@
 				</ul>
 
 			</nav>
-			<div class="bg-modal" style="z-index: 1;">
-				<div class="modal-content">
-					<div class="close">+</div>
-					<form name="itemform" id="radh" action='' method="post" enctype=multipart/form-data>
-						{% csrf_token %}
-						<a>
-							<i class="fas fa-fw fa-cog"></i>
-							<span class="align right font-weight-bold text-primary">Insert details</span>
-						</a>
+			<!-- End of Topbar -->
 
-						<div class="col-auto">
+			<!-- Begin Page Content -->
+			<div class="container-fluid">
 
-							<div class="form-group">
-								{% for field in form %}
-								<label>{{field.html_name}}</label>
-								{{field}}
-								{% endfor %}
-							</div>
-						</div>
-						<div class="form-group">
-							<button onclick="addingrow()" class="btn btn-success btn-icon-split " type="submit"
-							        value="Add" id="addrow" style="width:30%">Add
-							</button>
-							<button class="btn btn-dark btn-icon-split " type="reset" value="Reset" id="clear"
-							        style="width:30%">
-								Cancel
-							</button>
-						</div>
-
-					</form>
+				<!-- Page Heading -->
+				<div class="d-sm-flex align-items-center justify-content-between mb-4">
+					<h1 class="h3 mb-0 text-gray-800">Manufacturing orders</h1>
+					<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+							class="fas fa-print fa-sm text-white-50"></i> Print</a>
 				</div>
+
+				<!-- Content Row -->
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+								<tr>
+									<th>Index</th>
+									<th>Project</th>
+									<th>Project reference</th>
+									<th>Reference</th>
+									<th>Priority</th>
+									<th>Launch Date</th>
+									<th>Status</th>
+									<th>Scheduled start date</th>
+									<th>Executed start date</th>
+									<th>Executed due date</th>
+									<th>Refreshed due date</th>
+									<th>Executed due date</th>
+									<th></th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!-- End of Main Content -->
+
+				<!-- Footer -->
+				<footer class="sticky-footer bg-white">
+					<div class="container my-auto">
+						<div class="copyright text-center my-auto">
+							<span>Copyright &copy; Your Website 2020</span>
+						</div>
+					</div>
+				</footer>
+				<!-- End of Footer -->
+
 			</div>
-			<div class="container">
-				<!-- End of Topbar -->
+			<!-- End of Content Wrapper -->
 
-				<!-- Begin Page Content -->
-				<div class="container-fluid">
+		</div>
+		<!-- End of Page Wrapper -->
 
-					<!-- Page Heading -->
-					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">Add items to Manufacturing order</h1>
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top">
+			<i class="fas fa-angle-up"></i>
+		</a>
+
+		<!-- Logout Modal-->
+		<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		     aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
 					</div>
-
-					<div class="card o-hidden border-0 shadow-lg my-5">
-						<div class="card-body p-0">
-							<ul class="nav justify-content-end nav-pills nav-fill">
-								<li class="nav-item">
-									<a class="nav-link bg-primary active" href="{% url 'create_dem' %}">
-										<img src="{% static 'img/developer.svg'%}" width="30" height="30" alt="">
-										Technical
-										department</a>
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link" href="{% url 'create_at' %}">Workshop Chief</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="{% url 'create_prod' %}">Production Manager</a>
-								</li>
-
-							</ul>
-							<!-- Nested Row within Card Body -->
-							<div>
-
-								<div>
-									<div class="p-5">
-
-
-										<div>
-
-											<div class="col-sm-6">
-												<label class=" h5 font-weight-bold">Manufacturing Order</label>
-												<h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
-											</div>
-										</div>
-										<div>
-											<a class="btn btn-outline-primary" href="#" id="add">Add item</a>
-										</div>
-
-
-										<br>
-										<!-- table -->
-
-										<div class="table-responsive">
-											<table class="test table table-sm" id="itemstab">
-												<thead>
-												<tr>
-													<th scope="col">Index</th>
-													<th scope="col">Product ID</th>
-													<th scope="col">Designation</th>
-													<th scope="col">Quantity</th>
-													<th scope="col"></th>
-												</tr>
-												</thead>
-												<tbody class="detail">
-
-												{% for piece in piece_list %}
-												<tr>
-													<td>{{piece.id}}</td>
-													<td>{{piece.product_id}}</td>
-													<td>{{piece.designation}}</td>
-													<td>{{piece.quantity}}</td>
-
-												</tr>
-												{% endfor %}
-												</tbody>
-											</table>
-											<div class="pagination">
-        <span class="step-links">
-            {% if piece_list.has_previous %}
-                <a href="?page={{ piece_list.previous_page_number }}">previous</a>
-            {% endif %}
-
-            <span class="current">
-                Page {{ piece_list.number }} of {{ piece_list.paginator.num_pages }}.
-            </span>
-
-            {% if piece_list.has_next %}
-                <a href="?page={{ piece_list.next_page_number }}">next</a>
-            {% endif %}
-        </span>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col text-right col-sm-6">
-												<button class="btn btn-success btn-icon-split btn-block" type="submit"
-												        value="Submit"
-												        style="width:30%">Confirm
-												</button>
-											</div>
-											<div class="col text-left col-sm-6">
-												<button class="btn btn-dark btn-icon-split  btn-block" type="submit"
-												        value="Submit"
-												        style="width:30%">Cancel
-												</button>
-											</div>
-										</div>
-
-
-										<hr>
-
-
-									</div>
-								</div>
-							</div>
-						</div>
+					<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+						<a class="btn btn-primary" href="{% url 'login' %}">Logout</a>
 					</div>
-
-
-					<!-- Form -->
-
-
 				</div>
-				<!-- /.container-fluid -->
 			</div>
 		</div>
-		<!-- End of Content Wrapper -->
-	</div>
-	<!-- End of Page Wrapper -->
 
-	<!-- Bootstrap core JavaScript-->
-	<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
-	<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+		<!-- Bootstrap core JavaScript-->
+		<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
+		<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
-	<!-- Core plugin JavaScript-->
-	<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+		<!-- Core plugin JavaScript-->
+		<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
 
-	<!-- Custom scripts for all pages-->
-	<script src="{% static 'js/sb-admin-2.min.js'%}"></script>
-	<script src="{% static 'js/popupform.js'%}"></script>
-	<script src="{% static 'js/dynamtab.js'%}"></script>
-	<!-- <script src="{% static 'js/notnullwarning.js'%}"></script>-->
-	<script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'%}"></script>
+		<!-- Custom scripts for all pages-->
+		<script src="{% static 'js/sb-admin-2.min.js'%}"></script>
+
+		<!-- Page level plugins -->
+		<script src="{% static 'vendor/chart.js/Chart.min.js'%}"></script>
+
+		<!-- Page level custom scripts -->
+		<script src="{% static 'js/demo/chart-area-demo.js'%}"></script>
+		<script src="{% static 'js/demo/chart-pie-demo.js'%}"></script>
+
 </body>
-
 
 </html>
