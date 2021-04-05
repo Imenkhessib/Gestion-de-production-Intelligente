@@ -373,10 +373,24 @@
 					<div class="close">+</div>
 					<form name="itemform" id="radh" action='' method="post" enctype=multipart/form-data>
 						{% csrf_token %}
-						<a>
-							<i class="fas fa-fw fa-cog"></i>
-							<span class="align right font-weight-bold text-primary">Insert details</span>
-						</a>
+
+						<div class='container'>
+							<div class='row'>
+								<div class='col-md-4'>
+									<div class='well'>
+										<div class='row'>
+											<div class='col-xs-3 text-center'>
+												<span class="fa fa-list-alt fa-lg"></span>
+											</div>
+											<div class='col-xs-9'>
+												<h5 class="align right font-weight-bold text-primary">&nbsp; Insert
+													details</h5>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
 						<div class="col-auto">
 
@@ -540,7 +554,7 @@
 	<script src="{% static 'js/popupform.js'%}"></script>
 	<script src="{% static 'js/dynamtab.js'%}"></script>
 	<!-- <script src="{% static 'js/notnullwarning.js'%}"></script>-->
-	<script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'%}"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </body>
 
 
