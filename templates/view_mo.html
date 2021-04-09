@@ -384,12 +384,15 @@
 						<h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
 					</div>
 					<div class="card-body">
+						<form method="get">
+                                {{b.form}}
+                                <button type="submit" class="btn btn-secondary">search</button>
+                            </form>
 						<div class="table-responsive">
 							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 								<thead>
 								<tr>
 									<th>Index</th>
-									<th>Project</th>
 									<th>Project reference</th>
 									<th>Reference</th>
 									<th>Priority</th>
@@ -401,6 +404,21 @@
 									<th>Refreshed due date</th>
 									<th>Executed due date</th>
 									<th></th>
+									{% for mo in b.qs %}
+                                <tr>
+                                    <td>{{mo.id_auto}}</td>
+                                    <td>{{mo.id_project}}</td>
+                                    <td>{{mo.num_MO}}</td>
+                                    <td>{{mo.priority_MO}}</td>
+                                    <td>{{mo.creation_date}}</td>
+                                    <td>{{mo.state_MO}}</td>
+									<td>{{mo.date_dem_prev}}</td>
+									<td>{{mo.creation_date}}</td>
+									<td>{{mo.date_dem_real}}</td>
+
+
+                                </tr>
+                                {% endfor %}
 								</tr>
 								</thead>
 								<tbody>
