@@ -20,7 +20,7 @@ class MO (models.Model):
     id_auto = models.IntegerField()
     num_MO = models.CharField(max_length=50, primary_key=True)
     priority_MO = models.IntegerField(null=True)
-    launch_Date = models.DateField(default=2015-11-11)
+    launch_Date = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
     state_MO = models.CharField(max_length=60)
     #date_dem_prev = models.DateField(default=False)
     #date_dem_real = models.DateField(default=False)
@@ -35,10 +35,10 @@ class MO (models.Model):
 
 
 class piece (models.Model):
-    id_auto = models.IntegerField(primary_key = True)
+    id_auto = models.AutoField(primary_key = True)
     id_item = models.CharField(max_length=50)
     designation = models.CharField(max_length=50)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(null=False)
     material = models.CharField(max_length=50)
     scheduled_hours = models.IntegerField(default=0)
     performed_hours = models.IntegerField(default=0)
@@ -59,9 +59,7 @@ class piece (models.Model):
             ("id_item", "num_MO"),
         ]
 
-    def save(self, *args, **kwargs):
-        self.id_auto = piece.objects.last().id_auto + 1
-        super(piece, self).save()
+
 
 class machine(models.Model):
     type = models.CharField(max_length=50)

@@ -30,13 +30,13 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gray-900 sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
                 <div class="sidebar-brand-icon ">
 
-                    <img src="{% static 'img/undraw_logo.svg'%}" width="500" height="200" >
+                    <img src="{% static 'img/undraw_logo.svg'%}" width="500" height="200" class="img-fluid" alt="Responsive image" >
                 </div>
 
             </a>
@@ -48,7 +48,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard </span></a>
 
 
             </li>
@@ -73,7 +73,7 @@
                         <h6 class="collapse-header">Manage MO:</h6>
                         <a class="collapse-item" href="{% url 'view_mo' %}">View</a>
                         <a class="collapse-item" href="{% url 'create_dem' %}">Create</a>
-                        <a class="collapse-item" href="{% url 'edit_dem' %}">Edit</a>
+                        <a class="collapse-item" href="#">Validation Cycle</a>
 
                     </div>
                 </div>
@@ -331,7 +331,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{request.user.username}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{% static 'img/undraw_profile.svg'%}">
                             </a>

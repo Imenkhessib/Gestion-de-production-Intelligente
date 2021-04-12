@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import AllForm, essai, MO_form, formm
+from .forms import AllForm, essai, item_form, formm, register
 from .models import piece,MO, project
 from .filters import filterr, filterrr
+from django.core.mail import send_mail
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 global fun
@@ -60,27 +63,23 @@ def creation_dem(request):
 
     form: AllForm = AllForm(request.POST)
     if form.is_valid():
-        abc = form.cleaned_data["id_item"]
-        request.session['username'] = abc
-        #form.save()
-        if request.session.has_key('username'):
-         abc = request.session['username']
+        abb = form.cleaned_data["id_item"]
+        abcd = form.cleaned_data["designation"]
+        abcde = form.cleaned_data["quantity"]
+        abcdef = form.cleaned_data["CNC"]
+        abcdefg = form.cleaned_data["Router"]
+        abcdefgh = form.cleaned_data["laser_Cutters"]
+        if request.session.has_key('test'):
+            if 1:
+                abc = request.session['test']
+                abc = MO.objects.get(num_MO=abc)
+                print(abc)
 
-         if request.session.has_key('test') & request.session.has_key(''):
-          acdb = request.session['test']
-          MOO = MO.objects.get(num_MO=acdb)
-          print(MOO.num_MO)
-          objectt = piece.objects.get(id_item=abc, num_MO=None)
-          print(objectt)
-          #objectt.update(num_MO=MOO)
-          objectt.num_MO = MOO
-          objectt.save()
-          print(objectt.num_MO)
-     #if request.session.has_key(['test']):
-      ##objectt.num_MO = request.session['test']
-      #objectt.save()
-
+                objecttt=piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=abcdef, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgh)
+                objecttt.save()
+    pieces = piece.objects.filter(num_MO=9)
     if request.session.has_key('test'):
+     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
      num = request.session['test']
      pieces = piece.objects.filter(num_MO=num)
     page = request.GET.get('page', 1)
@@ -113,7 +112,20 @@ def view_mo(request):
 
 
 def edit_dem(request):
-    return render(request, 'edit_demand.html', {'OFId': 1003211})
+    if request.session.has_key('test'):
+        if 1:
+            abc = request.session['test']
+            print(abc)
+
+    send_mail(
+        "radhwen",
+        "a new Manufacturing Order is made by Mr:" + request.user.username + ". please join the link to validate MO number:  " + abc + " \n 192.168.1.101:8000",
+        "elhifradwen14@gmail.com",
+        ['mohamedradhouan.elhif@isticbc.org'],
+    )
+    print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+
+    return render(request, 'edit_demand.html', {'OFId': 1003211, 'abc': abc})
 
 
 def edit_prod(request):
@@ -146,19 +158,23 @@ def Tasks(request):
 
 def delete(request, id_auto):
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    piece_example = piece.objects.filter(id_auto=id_auto)
+    piece_example = piece.objects.filter(pk=id_auto)
     piece_example.delete()
 
     #return render(request, 'login.html')
-    return redirect("/")
+    return redirect("/creation")
 
-def update(request, id):
-    mo = MO_form.objects.get(id=id)
-    form = MO_form(request.POST, instance=mo)
+def update(request, id_auto):
+    item = piece.objects.get(pk=id_auto)
+    data = {'id_item': '{{item.id_item}}'}
+    form: AllForm = AllForm(request.POST, instance=item, initial=data)
+    print(form.instance.id_auto)
+
+
     if form.is_valid():
         form.save()
         return redirect("/creation")
-    return render(request, 'tesst.html', {'mo': mo})
+    return render(request, 'create_demand.html', {'item': item, 'form': form})
 
 
 def piece_detail(request):
@@ -175,3 +191,18 @@ def int_or_0(value):
         return int(value)
     except:
         return 0
+def loginn(request):
+    logout(request)
+    username = request.POST.get("exampleInputEmail")
+    password = request.POST.get("exampleInputPassword")
+    print(username)
+    print(password)
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        request.session["user_name"] = username
+        print("successssssss")
+        login(request, user)
+        return redirect("/")
+    print("failed")
+    return render(request, 'login.html', {'username': username})
+

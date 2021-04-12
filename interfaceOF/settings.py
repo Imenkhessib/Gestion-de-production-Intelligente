@@ -25,7 +25,8 @@ SECRET_KEY = '3bvl_3ij&$+l&6clu^27&(yp9p#j9!1wp2_d@z4jbfdl=is-!m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.101']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'interfaceOF.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'C:\Users\elhif\OneDrive\Bureau\Nouveau dossier\interfaceOF\templates'],
+        'DIRS': [r'C:\Users\elhif\OneDrive\Bureau\interfaceOF - Copie (2)\templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'interfaceOF.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestion de production',
+        'NAME': 'interface',
         'USER': 'postgres',
         'PASSWORD': '7am7oum2011',
         'PORT': '5432',
@@ -117,6 +118,14 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# SMTP config *************************************************************************************************
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "elhifradwen14@gmail.com"
+EMAIL_HOST_PASSWORD = "7am7oum2011"
+EMAIL_USE_TLS = True
 
 
 # Static files (CSS, JavaScript, Images)
