@@ -368,10 +368,7 @@
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Technical department
                             </a>
-                            <a class="dropdown-item" href="{% url 'create_at'%}">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Workshop Chief
-                            </a>
+
                             <a class="dropdown-item" href="{% url 'create_prod'%}">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Production manager
@@ -708,7 +705,7 @@
                                                             <td>
                                                                 <form action="update/{{items.id_auto}}">
                                                                     <a type="submit" class="btn btn-success"
-                                                                            href="update/{{items.id_auto}}" data-toggle="modal" data-target="#editModal" ><i
+                                                                            href="update/{{items.id_auto}}" ><i
                                                                             class="fas fa-edit"></i></a>
                                                                     </button>
                                                                 </form>

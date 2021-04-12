@@ -12,17 +12,13 @@ def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
 
 
-def creation_at(request):
-    # if request.method == "POST":
-    print(request.method)
-    form: MO_form = MO_form(request.POST)
-    print(form.errors)
-    if form.is_valid():
-        aa = form.cleaned_data['num_MO']
-        print(" product_id:  ", aa)
-        print('ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok_ok')
-        form.save()
-    return render(request, 'essai_mo.html', {'OFId': 1003211,'form': form})
+def creation_at(request,num_MO):
+
+
+    items = piece.objects.filter(num_MO=num_MO)
+
+
+    return render(request, 'create_chef_at.html', {'OFId': 1003211, 'items': items, 'num_MO':num_MO})
 
 
 def creation_dem(request):
@@ -147,7 +143,7 @@ def edit_prod(request):
 
 
 def edit_at(request):
-    return render(request, 'edit_at.html', {'OFId': 1003211})
+    return render(request, 'edit_dem.html', {'OFId': 1003211})
 
 
 def Tasks(request):
@@ -174,7 +170,7 @@ def update(request, id_auto):
     if form.is_valid():
         form.save()
         return redirect("/creation")
-    return render(request, 'create_demand.html', {'item': item, 'form': form})
+    return render(request, 'edit_dem.html', {'item': item, 'form': form})
 
 
 def piece_detail(request):

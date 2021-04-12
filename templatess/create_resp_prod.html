@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>add items tech dep</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
+	<link
+			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+			rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
+	<link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
+
+
+</head>
+
+<body onload="createTable()" class="bg-gradient-secondary">
+
+<div class="container">
+
+	<div class="card o-hidden border-0 shadow-lg my-5">
+		<div class="card-body p-0">
+			<!-- Nested Row within Card Body -->
+			<ul class="nav justify-content-end nav-pills nav-fill">
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'create_dem' %}"><img src="{% static 'img/developer.svg'%}" width="30" height="30" alt="">Technical
+						department</a>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'create_at' %}">Workshop Chief</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link active" href="{% url 'create_prod' %}">Production Manager</a>
+				</li>
+
+			</ul>
+			<div>
+
+				<div>
+					<div class="p-5">
+						<div class="text-center">
+							<h1 class="h4 text-gray-900 font-weight-bold mb-4">Add items to manufacturing order</h1>
+
+						</div>
+						<form class="user">
+							<div class="form-group row">
+
+								<div class="col-sm-6">
+									<label class=" h5 font-weight-bold">Manufacturing Order</label>
+									<h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-6 mb-3 mb-sm-0">
+									<label for="ref">Qualification:</label>
+									<input type="text" class="form-control form-control-user" id="ref"
+									       placeholder="Reference">
+								</div>
+
+								<div class="col-sm-6">
+									<label for="desig">Designation:</label>
+									<input type="text" class="form-control form-control-user" id="desig"
+									       placeholder="Designation">
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="qty">Product quantity:</label>
+								<input type="number" min="0" class="form-control form-control-user" id="qty"
+								       placeholder="Quantity">
+
+							</div>
+
+							<p>
+								<input class="btn btn-primary btn-icon-split p-2" type="button" id="addRow"
+								       value="Add machines" onclick="insertRow()"/>
+							</p>
+
+
+							<div id="cont"></div>
+							<div class="row">
+								<div class="col text-center">
+									<button class="btn btn-success btn-icon-split btn-lg" type="submit" value="Submit"
+									        style="width:30%">Create
+									</button>
+								</div>
+							</div>
+							<p id='output'></p>
+
+
+							<!--  <a href="index.html" class="btn btn-primary btn-user btn-block">
+								  Create
+							  </a> -->
+
+							<hr>
+
+						</form>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js'%}"></script>
+<script src="{% static 'js/popupform.js'%}"></script>
+<script src="{% static 'js/dynamictable.js'%}"></script>
+<script src="{% static 'js/notnullwarning.js'%}"></script>
+<script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'%}"></script>
+
+
+</body>
+
+</html>

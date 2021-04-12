@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<table>
+<tr>
+  <th>author</th>
+  <th>title</th>
+  <th>publication year</th>
+</tr>
+{% for b in pieces %}
+<tr>
+  <td>{{ b.product_id }}</td>
+  <td>{{ b.designation }}</td>
+  <td>{{ b.designation }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

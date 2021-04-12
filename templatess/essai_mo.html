@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    	<link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
+    <link
+			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+			rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/popup.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
+	<link rel="shortcut icon" href="{% static 'img/favicon.ico' type='image/x-icon' %}">
+</head>
+<body>
+<form method="post" >
+    {% csrf_token %}
+<div class="form-group">
+					{% for field in form %} <center>
+					<label>{{field.html_name}}</label>
+    {{field}} <br><br> </center>
+                    {% endfor %}
+				</div>
+    <input type="submit" > ok </input>
+</form>
+</body>
+<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
+		<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{% static 'js/sb-admin-2.min.js'%}"></script>
+		<script src="{% static 'js/popupform.js'%}"></script>
+		<script src="{% static 'js/dynamictable.js'%}"></script>
+		<script src="{% static 'js/notnullwarning.js'%}"></script>
+		<script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'%}"></script></div></body>
+
+</html>
