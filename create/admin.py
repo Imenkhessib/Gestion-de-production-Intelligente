@@ -1,4 +1,6 @@
 from django.contrib import admin
-from .models import piece
+from .models import item,MO,project
 # Register your models here.
-admin.site.register(piece)
+admin.site.register(item)
+admin.site.register(MO)
+admin.site.register(project)

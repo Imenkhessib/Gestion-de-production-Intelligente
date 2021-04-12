@@ -9,14 +9,14 @@
     align-items: center;
     display: none;
     z-index: 1;
+
     }
     .modal-content {
     width: 700px;
-    height: 400px;
     background-color: white;
     border-radius: 4px;
     text-align: center;
-    padding: 40px;
+    padding: 20px;
     position: relative;
     }
     .close{
@@ -25,10 +25,4 @@
     right: 14px;
     font-size: 42px;
     transform: rotate(45deg);
-    }
-    .please{
-    text-align: left;
-    }
-    .well h5 {
-    margin-top:0px;
     }
