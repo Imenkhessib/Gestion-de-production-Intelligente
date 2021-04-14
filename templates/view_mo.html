@@ -97,9 +97,8 @@
 			<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
 			     data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					<h6 class="collapse-header">Custom Utilities:</h6>
-					<a class="collapse-item" href="{% url 'Tasks' %}">Create</a>
-					<a class="collapse-item" href="utilities-border.html">View</a>
+					<h6 class="collapse-header">Tasks:</h6>
+					<a class="collapse-item" href="{% url 'Tasks' %}">View</a>
 
 				</div>
 			</div>
@@ -368,9 +367,9 @@
 					</div>
 					<div class="card-body">
 						<form method="get">
-                                {{b.form}}
-                                <button type="submit" class="btn btn-secondary">search</button>
-                            </form>
+							{{MO_filter.form}}
+							<button type="submit" class="btn btn-secondary">search</button>
+						</form>
 						<div class="table-responsive">
 							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 								<thead>
@@ -387,31 +386,18 @@
 									<th>Refreshed due date</th>
 									<th>Executed due date</th>
 									<th></th>
-									{% for mo in b.qs %}
-                                <tr>
-                                    <td>{{mo.id_auto}}</td>
-                                    <td>{{mo.id_project}}</td>
-                                    <td>{{mo.num_MO}}</td>
-                                    <td>{{mo.priority_MO}}</td>
-                                    <td>{{mo.creation_date}}</td>
-                                    <td>{{mo.state_MO}}</td>
-									<td>{{mo.date_dem_prev}}</td>
-									<td>{{mo.creation_date}}</td>
-									<td>{{mo.date_dem_real}}</td>
-
-
-                                </tr>
-                                {% endfor %}
+									<th></th>
 								</tr>
 								</thead>
 								<tbody>
+								{% for mo in MO_filter.qs %}
 								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td>{{mo.id_auto}}</td>
+									<td>{{mo.project_Reference}}</td>
+									<td>{{mo.mo_reference}}</td>
+									<td>{{mo.mo_priority}}</td>
+									<td>{{mo.launch_Date}}</td>
+									<td>{{mo.mo_status}}</td>
 									<td></td>
 									<td></td>
 									<td></td>
@@ -425,6 +411,7 @@
 												class="far fa-trash-alt"></i></button>
 									</td>
 								</tr>
+								{% endfor %}
 								</tbody>
 							</table>
 						</div>
