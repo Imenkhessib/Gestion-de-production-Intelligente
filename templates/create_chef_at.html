@@ -550,17 +550,23 @@
                                                                 <button type="button" class="btn btn-success"><i
                                                                         class="fas fa-edit"></i></button>
                                                             </td>
-                                                            <td><input type="number"></td>
-                                                            <td><input type="number"></td>
-                                                            <td><input type="number"></td>
-                                                            <td><input type="number"></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
+                                                            <form method="POST" action="creation/update2/{{items.id_auto}}">
+                          {% csrf_token %}
+    <td><input type="number" id="length" name="length" value="{{items.length}}"></td>
+    <td><input type="number" id="width" name="width" value="{{items.width}}"></td>
+    <td><input type="number" id="thickness" name="thickness" value="{{items.thickness}}"></td>
+      <td><button  type="submit">update</button></td>
+
+
+    <td></td>
+    <td></td>
+</form>
+
 
 
                                                         </tr>
                                                         {% endfor %}
+
                                                         </tbody>
                                                     </table>
                                                 </div>

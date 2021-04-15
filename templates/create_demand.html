@@ -42,7 +42,8 @@
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
             <div class="sidebar-brand-icon ">
 
-                <img src="{% static 'img/undraw_logo.svg'%}" width="500" height="200">
+                <img src="{% static 'img/undraw_logo.svg'%}" width="500" height="200" class="img-fluid"
+                     alt="Responsive image">
             </div>
 
         </a>
@@ -638,10 +639,9 @@
                                             <h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
                                         </div>
                                     </div>
-                                    <form class="form-group" method="post">
-                                        {% csrf_token %}
+                                    <form class="form-group">
                                         {{formm.project_Reference}}
-                                        <button type="submit" class="btn btn-secondary"> create</button>
+                                        <button type="submit" class="btn btn-secondary"> create </button>
                                     </form>
                                     <a data-toggle="modal" data-target="#logoutModal" class="btn btn-outline-primary">
                                         <i class="fas fa-plus"></i>

@@ -20,6 +20,7 @@ class AllForm(forms.ModelForm):
        'milling': forms.CheckboxInput(attrs={'id': 'quantity', 'class': "form-control form-control-user"}),
    }
 
+
 class essai(forms.ModelForm):
     class Meta:
         model = project
@@ -28,14 +29,17 @@ class essai(forms.ModelForm):
 class item_form(forms.ModelForm):
     class Meta:
         model = piece
-        fields = "__all__"
+        fields = ["length", "width", "thickness"]
+        widgets={
+            'length': forms.NumberInput(attrs={'id': '', 'class': "form-control form-control-user", 'type': "number", 'value': "r"}),
+            'width': forms.NumberInput(attrs={'id': '', 'class': "form-control form-control-user", 'type': "number", 'value': "rr"}),
+            'thickness': forms.NumberInput(attrs={'id': '', 'class': "form-control form-control-user", 'type': "number", 'value': 'item.id_auto'}),
 
+        }
 class formm(forms.ModelForm):
     class Meta:
      model = MO
-     #fields = ('id_project',)
      fields = ('project_Reference',)
-     #project_Ref = forms.CharField()
 
 
 class register(UserCreationForm):

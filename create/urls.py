@@ -15,5 +15,6 @@ urlpatterns = [
     path('update', views.update, name='update'),
     path('view_mo', views.Tasks, name='view_mo'),
     path('loginn', views.loginn, name='login'),
+    path('atelier/creation/update2/<int:id_auto>', views.update2, name='update2'),
 
 ]

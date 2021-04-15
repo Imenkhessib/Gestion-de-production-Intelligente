@@ -13,29 +13,52 @@ def creation_prod(request):
 
 
 def creation_at(request,num_MO):
+    essai = 1
+    essaii = 1
+    essaiii = 1
+    essai= request.POST["length"]
+    essaii= request.get["width"]
+    essaiii= request.get["thickness"]
 
-
+    print(essai)
+    print(essaii)
+    print(essaiii)
+    request.session['try1'] = essai
+    request.session['try2'] = essaii
+    request.session['try3'] = essaiii
+    request.session['try4'] = num_MO
     items = piece.objects.filter(num_MO=num_MO)
 
 
-    return render(request, 'create_chef_at.html', {'OFId': 1003211, 'items': items, 'num_MO':num_MO})
+    #form: item_form = item_form(request.POST)
+    #item = piece.objects.get(id_auto={{keyy}})
+    #form: AllForm = AllForm(request.POST, instance=item)
+    #if form.is_valid():
+    #essai = form.cleaned_data["length"]
+
+    #print(essai)
+    #essaii = form.cleaned_data["width"]
+    #essaiii = form.cleaned_data["thickness"]
+
+
+    return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items, 'num_MO':num_MO, 'a':essai, 'b':essaii, 'c': essaiii})
 
 
 def creation_dem(request):
     num_mo = "?"
-    formmm: formm = formm(request.POST)
+    formmm: formm = formm(request.GET)
+    print(formmm.errors)
     if formmm.is_valid():
-     ref = formmm.cleaned_data["project_Reference"]
-
+     ref = formmm.cleaned_data["project_Reference"] # getting foreign-key value selected by user
+###### extraction de la valeur de project_reference:
      ref = str(ref)
      size = len(ref)
      ref = ref[:size - 1]
      ref = ref[16:len(ref)]
      print(ref)
-
+###### fin de l'extraction.
      proj = project.objects.get(id_project=ref)
      print(proj.id_project)
-
      now = datetime.datetime.now()
      jours = now.strftime("%d")
      mois = now.strftime("%m")
@@ -71,7 +94,7 @@ def creation_dem(request):
                 abc = MO.objects.get(num_MO=abc)
                 print(abc)
 
-                objecttt=piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=abcdef, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgh)
+                objecttt = piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=abcdef, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgh)
                 objecttt.save()
     pieces = piece.objects.filter(num_MO=9)
     if request.session.has_key('test'):
@@ -152,11 +175,31 @@ def Tasks(request):
 
     return render(request, 'Tasks.html', {'a': a, 'b': b})
 
+def update2(request, id_auto):
+    #if request.session.has_key('try4'):
+    #    id_auto = request.session['try4']
+    print("success")
+    piece_example = piece.objects.filter(id_auto=id_auto)
+    if request.session.has_key('try1'):
+     lengthh = request.session['try1']
+     print(lengthh)
+    if request.session.has_key('try2'):
+     widthh = request.session['try2']
+     print(widthh)
+    if request.session.has_key('try3'):
+     thicknesss = request.session['try3']
+     print(thicknesss)
+    piece_example = piece.objects.get(id_auto=id_auto)
+    piece_example.length = lengthh
+    piece_example.width = widthh
+    piece_example.thickness = thicknesss
+
+    piece_example.save()
+    return redirect("/")
 def delete(request, id_auto):
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     piece_example = piece.objects.filter(pk=id_auto)
     piece_example.delete()
-
     #return render(request, 'login.html')
     return redirect("/creation")
 
