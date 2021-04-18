@@ -439,7 +439,7 @@
                                                     </div>
 
                                                 </div>
-                                        </div>
+                                            </form></div>
                                         <div class="modal-footer d-flex justify-content-center">
                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel
                                             </button>
@@ -477,7 +477,7 @@
                                     <div>
                                         <div class="col-sm-6">
                                             <label class=" h5 font-weight-bold">Manufacturing Order</label>
-                                            <h1 class="h5 text-gray-900 mb-4"> MO/{{num_MO}} </h1>
+                                            <h1 class="h5 text-gray-900 mb-4"> MO/{{FOId}} </h1>
                                         </div>
                                     </div>
 
@@ -503,13 +503,13 @@
                                                             <th scope="col">Qualification</th>
                                                             <th scope="col">3D plan</th>
                                                             <th scope="col">2D plan</th>
-                                                            <th scope="col">Material</th>
                                                             <th scope="col">Length</th>
                                                             <th scope="col">Width</th>
                                                             <th scope="col">Thickness</th>
-                                                            <th scope="col">Scheduled hours</th>
+                                                            <th scope="col">material</th>
+                                                            <th scope="col">scheduled hours</th>
+
                                                             <th scope="col">Edit</th>
-                                                            <th scope="col">Delete</th>
 
                                                         </tr>
                                                         </thead>
@@ -545,22 +545,30 @@
                                                                 <button type="button" class="btn btn-primary"><i
                                                                         class="far fa-eye"></i></button>
                                                             </td>
-                                                            <td>
 
-                                                                <button type="button" class="btn btn-success"><i
-                                                                        class="fas fa-edit"></i></button>
-                                                            </td>
-                                                            <form method="POST" action="creation/update2/{{items.id_auto}}">
-                          {% csrf_token %}
-    <td><input type="number" id="length" name="length" value="{{items.length}}"></td>
-    <td><input type="number" id="width" name="width" value="{{items.width}}"></td>
-    <td><input type="number" id="thickness" name="thickness" value="{{items.thickness}}"></td>
-      <td><button  type="submit">update</button></td>
+                                                            <form method="POST" action="">
+                                                                           {% csrf_token %}
+                                                                           <td><input type="number" name="a" value={{items.length}} ></td>
+                                                                           <td><input type="number" name="b" value={{items.width}}></td>
+                                                                           <td><input type="number" name="c" value={{items.thickness}}></td>
+                                                                           <td><input type="text" name="e" value={{items.material}} ></td>
+                                                                           <td><table class="test table table-sm table-striped table-bordered">
+                                                                           <thead>
+                                                                             <th>CNC</th>
+                                                                             <th>Laser</th>
+                                                                             <th>Router</th>
+                                                                             <th>Milling</th>
+                                                                           </thead>
+                                                                           <tbody>
+                                                                             <td><input type="number" name="f" value={{items.scheduled_hours_CNC}}></td>
+                                                                             <td><input type="number" name="g" value={{items.scheduled_hours_laser_cutters}}></td>
+                                                                             <td><input type="number" name="h" value={{items.scheduled_hours_Router}}></td>
+                                                                             <td><input type="number" name="i" value={{items.scheduled_hours_Milling}}></td>
+                                                                           </tbody> </table> </td>
+                                                                           <input type="hidden" name="d" value={{items.id_auto}}>
+                                                                           <td><button type="submit" class="btn btn-success"><i class="fas fa-edit"></i>update</button></td>
 
-
-    <td></td>
-    <td></td>
-</form>
+                                                            </form>
 
 
 

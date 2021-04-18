@@ -51,6 +51,11 @@ class piece (models.Model):
     Router = models.BooleanField()
     laser_Cutters = models.BooleanField()
     milling = models.BooleanField()
+    scheduled_hours_CNC = models.IntegerField(default=0)
+    scheduled_hours_Router = models.IntegerField(default=0)
+    scheduled_hours_Milling = models.IntegerField(default=0)
+    scheduled_hours_laser_cutters = models.IntegerField(default=0)
+
     num_MO = models.ForeignKey(MO, on_delete=models.CASCADE, null=True)
     id = CompositeKey(columns=['id_item', 'num_MO'])
 

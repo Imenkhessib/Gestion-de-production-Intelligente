@@ -12,36 +12,30 @@ def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
 
 
-def creation_at(request,num_MO):
-    essai = 1
-    essaii = 1
-    essaiii = 1
-    essai= request.POST["length"]
-    essaii= request.get["width"]
-    essaiii= request.get["thickness"]
-
-    print(essai)
-    print(essaii)
-    print(essaiii)
-    request.session['try1'] = essai
-    request.session['try2'] = essaii
-    request.session['try3'] = essaiii
-    request.session['try4'] = num_MO
+def creation_at(request, num_MO):
     items = piece.objects.filter(num_MO=num_MO)
-
-
-    #form: item_form = item_form(request.POST)
-    #item = piece.objects.get(id_auto={{keyy}})
-    #form: AllForm = AllForm(request.POST, instance=item)
-    #if form.is_valid():
-    #essai = form.cleaned_data["length"]
-
-    #print(essai)
-    #essaii = form.cleaned_data["width"]
-    #essaiii = form.cleaned_data["thickness"]
-
-
-    return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items, 'num_MO':num_MO, 'a':essai, 'b':essaii, 'c': essaiii})
+    a = request.POST.get("a")#length
+    b = request.POST.get("b")#width
+    c = request.POST.get("c")#thickness
+    d = request.POST.get("d")#id_auto (hidden field: takes automatically the item's id to make the changes on the right object)
+    e = request.POST.get("e")#material
+    f = request.POST.get("f")#scheduled_hours_CNC
+    g = request.POST.get("g")  # scheduled_hours_laser_cutters
+    h = request.POST.get("h")  # scheduled_hours_Router
+    i = request.POST.get("i")  # scheduled_hours_Milling
+    if d != None:
+     item = piece.objects.get(id_auto=d)
+     item.length = a
+     item.width = b
+     item.thickness = c
+     item.material = e
+     item.scheduled_hours_CNC = f
+     item.scheduled_hours_laser_cutters = g
+     item.scheduled_hours_Router = h
+     item.scheduled_hours_Milling = i
+     item.save()
+     redirect("creation/atelier/num_mo")
+    return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items})
 
 
 def creation_dem(request):
@@ -56,7 +50,7 @@ def creation_dem(request):
      ref = ref[:size - 1]
      ref = ref[16:len(ref)]
      print(ref)
-###### fin de l'extraction.
+###### fin de l'extraction =======> générer un numéro OF
      proj = project.objects.get(id_project=ref)
      print(proj.id_project)
      now = datetime.datetime.now()
@@ -76,7 +70,7 @@ def creation_dem(request):
      num_mo = str(num_mo)
      print(num_mo)
      request.session['test'] = num_mo
-
+# fin de génération d'un numéro OF
      exemple = MO(project_Reference=proj, num_MO=num_mo, state_MO="waiting for validation", launch_Date=datetime.datetime.now().strftime("%Y-%m-%d"))
      exemple.save()
 
@@ -176,32 +170,23 @@ def Tasks(request):
     return render(request, 'Tasks.html', {'a': a, 'b': b})
 
 def update2(request, id_auto):
-    #if request.session.has_key('try4'):
-    #    id_auto = request.session['try4']
-    print("success")
-    piece_example = piece.objects.filter(id_auto=id_auto)
-    if request.session.has_key('try1'):
-     lengthh = request.session['try1']
-     print(lengthh)
-    if request.session.has_key('try2'):
-     widthh = request.session['try2']
-     print(widthh)
-    if request.session.has_key('try3'):
-     thicknesss = request.session['try3']
-     print(thicknesss)
-    piece_example = piece.objects.get(id_auto=id_auto)
-    piece_example.length = lengthh
-    piece_example.width = widthh
-    piece_example.thickness = thicknesss
+    item = piece.objects.get(pk=id_auto)
+    data = {'id_item': '{{item.id_item}}'}
+    form: item_form = item_form(request.POST, instance=item, initial=data)
+    print(form.instance.id_auto)
+    if request.session.has_key("try4"):
+        num_mo = request.session["try4"]
+        print(num_mo)
 
-    piece_example.save()
-    return redirect("/")
+    if form.is_valid():
+        form.save()
+    return render(request, 'update2.html', {'item': item, 'form': form, "num_mo":num_mo})
 def delete(request, id_auto):
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     piece_example = piece.objects.filter(pk=id_auto)
     piece_example.delete()
     #return render(request, 'login.html')
-    return redirect("/creation")
+    return render(request, 'edit_dem.html')
 
 def update(request, id_auto):
     item = piece.objects.get(pk=id_auto)
@@ -211,6 +196,7 @@ def update(request, id_auto):
 
 
     if form.is_valid():
+        print(form.cleaned_data["length"])
         form.save()
         return redirect("/creation")
     return render(request, 'edit_dem.html', {'item': item, 'form': form})
