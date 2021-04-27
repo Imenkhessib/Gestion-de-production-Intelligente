@@ -38,9 +38,10 @@
 		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
 			<div class="sidebar-brand-icon ">
 
-				<img src="{% static 'img/undraw_logo.svg'%}" width="400" height="100" class="img-fluid"
+				<img src="{% static 'img/undraw_logo.svg'%}" width="500" height="200" class="img-fluid"
 				     alt="Responsive image">
 			</div>
+
 		</a>
 
 		<!-- Divider -->
@@ -72,8 +73,8 @@
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">Manage MO:</h6>
 					<a class="collapse-item" href="{% url 'view_mo' %}">View</a>
-					<a class="collapse-item" href="{% url 'create_dem' %}">Create</a>
-					<a class="collapse-item" href="{% url 'validation' %}">Validation cycle</a>
+					<a class="collapse-item " href="{% url 'create_dem' %}">Create</a>
+					<a class="collapse-item " href="{% url 'validation' %}">Validation cycle</a>
 
 				</div>
 			</div>
@@ -81,22 +82,23 @@
 		<hr class="sidebar-divider">
 
 		<div class="sidebar-heading">
-			Tasks
+			Taskss
 		</div>
 
 
 		<!-- Nav Item - Utilities Collapse Menu -->
-		<li class="nav-item">
+		<li class="nav-item active">
 			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
 			   aria-expanded="true" aria-controls="collapseUtilities">
 				<i class="fas fa-fw fa-wrench"></i>
 				<span>Tasks</span>
 			</a>
-			<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+			<div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
 			     data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					<h6 class="collapse-header">Custom Utilities:</h6>
-					<a class="collapse-item" href="{% url 'Tasks' %}">View</a>
+					<h6 class="collapse-header">Tasks:</h6>
+					<a class="collapse-item active" href="{% url 'Tasks' %}">View</a>
+
 
 				</div>
 			</div>
@@ -109,18 +111,17 @@
 		<div class="sidebar-heading">
 			Machines
 		</div>
-
 		<!-- Nav Item - Pages Collapse Menu -->
-		<li class="nav-item active">
+		<li class="nav-item">
 			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
 			   aria-expanded="true" aria-controls="collapsePages">
 				<i class="fas fa-fw fa-folder"></i>
 				<span>Machines</span>
 			</a>
-			<div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+			<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">Manage machines:</h6>
-					<a class="collapse-item active" href="{% url 'Machines' %}">View machines</a>
+					<a class="collapse-item" href="{% url 'Machines' %}">View machines</a>
 				</div>
 			</div>
 		</li>
@@ -321,7 +322,7 @@
 					<li class="nav-item dropdown no-arrow">
 						<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
 						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{request.user.username}}</span>
+							<span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
 							<img class="img-profile rounded-circle"
 							     src="{% static 'img/undraw_profile.svg'%}">
 						</a>
@@ -357,7 +358,7 @@
 			<div class="container-fluid">
 
 				<!-- Page Heading -->
-				<h1 class="h3 mb-2 text-gray-800">Mahines</h1>
+				<h1 class="h3 mb-2 text-gray-800">Tasks list</h1>
 
 				<!-- DataTales Example -->
 				<div class="card shadow mb-4">
@@ -367,26 +368,27 @@
 								<thead>
 								<tr>
 									<th>Index</th>
-									<th>Machine reference</th>
-									<th>Designation</th>
-									<th>Type</th>
-									<th>State</th>
-									<th>Actions</th>
+									<th>MO reference</th>
+									<th>Tasks</th>
+									<th>Priority</th>
+									<th>Qualification</th>
+									<th>% Complete</th>
+									<th>Scheduled time</th>
+									<th>Performed time</th>
+									<th>Remaining time</th>
 								</tr>
 								</thead>
 								<tbody>
 								<tr>
-									<td>1</td>
-									<td>1452</td>
-									<td>CNC</td>
-									<td>[[null]]</td>
-									<td>Busy</td>
-									<td>
-										<button type="button" class="btn btn-success"><i
-												class="fas fa-edit"></i></button>
-										<button type="button" class="btn btn-danger"><i
-												class="far fa-trash-alt"></i></button>
-									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
 
 
 								</tr>
@@ -404,13 +406,7 @@
 		<!-- End of Main Content -->
 
 		<!-- Footer -->
-		<footer class="sticky-footer bg-white">
-			<div class="container my-auto">
-				<div class="copyright text-center my-auto">
-					<span>Copyright &copy; Your Website 2020</span>
-				</div>
-			</div>
-		</footer>
+
 		<!-- End of Footer -->
 
 	</div>

@@ -1,14 +1,16 @@
 from django.db import models
-from viewflow.fields import CompositeKey
+from multiselectfield import MultiSelectField
+
+#from viewflow.fields import CompositeKey
 
 import datetime
 # Create your models here.
 class project(models.Model):
-    id_project = models.CharField(max_length=50, primary_key=True)
+    project_Reference = models.CharField(max_length=50, primary_key=True)
     id_auto = models.IntegerField()
     name_project = models.CharField(max_length=50)
     client = models.CharField(max_length=50)
-    num_bon_commande = models.IntegerField(null=True)
+    Purchase_Order = models.CharField(max_length=50, null=True)
     project_chief = models.CharField(max_length=50)
 
     def save(self, *args, **kwargs):
@@ -51,8 +53,23 @@ class piece (models.Model):
     Router = models.BooleanField()
     laser_Cutters = models.BooleanField()
     milling = models.BooleanField()
+    machine_choices = (
+        ('cnc', 'cnc'),
+        ('router', 'router'),
+        ('milling', 'milling'),
+        ('lathe', 'lathe'),
+        ('laser_cutter', 'laser_cutter'),
+    )
+    machines = MultiSelectField(choices=machine_choices, blank=False)
+    scheduled_hours_CNC = models.IntegerField(default=0, null=True)
+    scheduled_hours_Router = models.IntegerField(default=0, null=True)
+    scheduled_hours_Milling = models.IntegerField(default=0, null=True)
+    scheduled_hours_laser_cutters = models.IntegerField(default=0, null=True)
+    two_d = models.FileField(null=True, blank=True)
+    three_d = models.FileField(null=True, blank=True)
+
     num_MO = models.ForeignKey(MO, on_delete=models.CASCADE, null=True)
-    id = CompositeKey(columns=['id_item', 'num_MO'])
+    #id = CompositeKey(columns=['id_item', 'num_MO'])
 
     class Meta(object):
         unique_together = [
@@ -88,7 +105,7 @@ class access_control(models.Model):
     is_admin = models.BooleanField()
     application_name = models.CharField(max_length=50)
     id_user = models.ForeignKey(user, on_delete=models.CASCADE)
-    id = CompositeKey(columns=['application_name', 'id_user'])
+   # id = CompositeKey(columns=['application_name', 'id_user'])
 
 class machine_operator(models.Model):
     id_operator = models.ForeignKey(user, on_delete=models.CASCADE, primary_key=True)

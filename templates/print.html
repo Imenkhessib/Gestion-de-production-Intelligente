@@ -1,0 +1,187 @@
+{% load static %}
+{% load mathfilters %}
+{% for page in lisst %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
+</head>
+<style>
+    table {
+        width:100%;
+        border-collapse:collapse;
+        text-align:center;
+        font-size:16px;
+
+    }
+    table, th, td {
+        padding: 10px;
+        border: 2px solid black
+    }
+
+
+
+
+
+</style>
+<body>
+
+<table style="margin:0px;">
+    <thead>
+    <tr>
+        <th rowspan="4" style="width:20%;">
+            <img src="{% static 'img/samm_logo.svg'%}" width="80%">
+        </th>
+        <th style="width:60%;" rowspan="2" class="align-middle">
+            <h2>Formulaire</h2>
+        </th>
+        <th style="text-align: left;">
+            Réf: FOR_PRD_09
+        </th>
+
+    </tr>
+    <tr>
+        <th style="text-align: left;">Version: 01</th>
+
+
+    </tr>
+    <tr>
+        <th rowspan="2" class="align-middle">
+            <h2>Ordre de fabrication</h2>
+        </th>
+        <th style="text-align: left;">
+            Date: 05/11/2020
+        </th>
+
+    </tr>
+    <tr>
+        <th style="text-align: left;">
+            Page: {{forloop.counter}}/{{nb_pages}}
+        </th>
+    </tr>
+
+
+    </thead>
+</table>
+
+<br>
+
+<Table>
+    <thead>
+    <tr>
+        <th colspan="2">Date: <br>{{ date }}</th>
+        <th colspan="2" style="text-align: left;">PROJET:</th>
+        <th colspan="7" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REF PROJET: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            N°OF:
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="2"><b>Index</b></td>
+        <td rowspan="2" style="width=10%;"><b>Qté.</b></td>
+        <td rowspan="2"><b>Réf.</b></td>
+        <td rowspan="2"><b>Désignation</b></td>
+        <td rowspan="2"><b>Matière</b></td>
+        <td rowspan="2"><b>Dimension (L*l*e) mm</b></td>
+        <td rowspan="2"><b>Qualifications</b></td>
+        <td rowspan="2"><b>Prévu(h)</b></td>
+        <td rowspan="2"><b>Réalisé(h)</b></td>
+        <td colspan="2"><b>Conformité</b></td>
+    </tr>
+    <tr>
+        <td>C</td>
+        <td>NC</td>
+    </tr>
+    {% with var=forloop.counter zero=0 subb=forloop.counter|sub:1  %}
+{% for j in list %}
+{% if forloop.counter > subb|mul:14 and forloop.counter <= var|mul:14  %}
+    <tr>
+        <td class="count"></td>
+        <td>{{j.quantity}}</td>
+        <td>{{j.id_item}}</td>
+        <td>{{j.designation}}</td>
+        <td></td>
+        <td></td>
+        <td>{{j.machines}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% endif %}
+{% endfor %}
+{% endwith %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="6" rowspan="2">
+            <center><b>Total</b></center>
+        </td>
+        <td><b>CNC</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+    </tr>
+    <tr>
+        <td><b>Conventionnel</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tfoot>
+</table>
+
+<br>
+
+<table class="table table-bordered" id="dataTable" cellspacing="0">
+    <thead>
+    <th></th>
+    <th style="width:26%">Nom et Prénom</th>
+    <th style="width:26%">Date</th>
+    <th style="width:26%">Visa</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td style="width:20%"><b>Demandeur</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>Chef de projet</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>Resp. validation mécanique</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>Resp. Production</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>Chef atelier</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+
+</table>
+<br>
+
+{% endfor %}
+</body>
+</html>

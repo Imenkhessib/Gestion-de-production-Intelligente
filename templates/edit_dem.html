@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>add items tech dep</title>
+    <title>Edit items tech dep</title>
 
     <!-- Custom styles for this page -->
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
@@ -385,9 +385,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Add items to Manufacturing order</h1>
-                    </div>
+
 
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
@@ -397,8 +395,8 @@
                                     <div class="p-5">
                                         <div>
                                             <div class="col-sm-6">
-                                                <label class=" h5 font-weight-bold">Manufacturing Order</label>
-                                                <h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
+                                                <label class=" h5 font-weight-bold">Edit item: </label>
+                                                <p class="h5">{{ item.id_item }}</p>
                                             </div>
                                         </div>
 
@@ -406,7 +404,7 @@
                                         <br>
                                         <!-- edit form -->
 
-                                        <form method="post" class="user">
+                                        <form method="post" class="user" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="form-group row">
                                                 <div class="col-sm-6 mb-3 mb-sm-0">
@@ -424,27 +422,28 @@
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                                    <label class="form-label">2D plan: </label>
+                                                    <label class="form-label">2D plan: &nbsp;&nbsp;&nbsp;</label>
+                                                    {{ form.two_d }}
+                                                </div>
 
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label class="form-label">3D plan: </label>
-                                                </div>
+                                                <a href="http://192.168.1.20:8000{{item.two_d.url}}"
+                                                   class="btn btn-primary"><i
+                                                        class="far fa-eye"></i></a>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                                    <div class="custom-file-input">
-                                                        {{ form.two_d_plan }}
-                                                    </div>
-                                                    <label class="custom-file-label">Choose file</label>
-
+                                                    <label class="form-label">3D plan: &nbsp;&nbsp;&nbsp;</label>
+                                                    {{ form.three_d }}
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <div class="custom-file-input">
-                                                        {{ form.three_d_plan }}
-                                                    </div>
-                                                    <label class="custom-file-label">Choose file</label>
-                                                </div>
+                                                {% if item.three_d != "" %}
+                                                    <a href="http://192.168.1.20:8000{{item.three_d.url}}"
+                                                       type="button" class="btn btn-primary"><i
+                                                            class="far fa-eye"></i></a>
+                                                    {% else %}
+                                                    <button
+                                                       type="button" class="btn btn-primary" disabled><i
+                                                            class="far fa-eye"></i></button>
+                                                    {% endif %}
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col">
@@ -453,35 +452,17 @@
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col">
-                                                    <label>Numeric : </label>
+                                                    {% for x in form.machines %}
+                                                    {{ x }}
+                                                    {% endfor %}
                                                 </div>
-                                                <div class="col form-check">
-                                                    <label> CNC : </label>
-                                                    {{ form.CNC }}
-                                                </div>
-                                                <div class="col form-check">
-                                                    <label>Laser cut: </label>
-                                                    {{ form.laser_Cutters }}
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col">
-                                                    <label>Conventional : </label>
-                                                </div>
-                                                <div class="col form-check">
-                                                    <label> Router : </label>
-                                                    {{ form.Router }}
-                                                </div>
-                                                <div class="col form-check">
-                                                    <label>Milling: </label>
-                                                    {{ form.milling }}
-                                                </div>
+
                                             </div>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
-                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel
-                                        </button>
-                                        <button class="btn btn-success" type="submit" href="/creation/#">Add
+                                        <a href="{% url 'create_dem' %}" class="btn btn-secondary" type="button">Cancel
+                                        </a>
+                                        <button class="btn btn-success" type="submit" href="/creation/#">Edit
                                         </button>
                                     </div>
                                     </form>
@@ -531,6 +512,7 @@
 <!-- my scripts-->
 <!-- <script src="{% static 'js/popupform.js'%}"></script> -->
 <script src="{% static 'js/dynamtab.js'%}"></script>
+<script src="{% static 'js/checkboxedit.js'%}"></script>
 
 <!-- Page level plugins -->
 <script src="{% static 'vendor/datatables/jquery.dataTables.min.js'%}"></script>

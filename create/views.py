@@ -1,5 +1,7 @@
+from lib2to3.fixes.fix_input import context
+
 from django.shortcuts import render, redirect
-from .forms import AllForm, essai, item_form, formm, register
+from .forms import AllForm, essai, item_form, formm, register, Foorm
 from .models import piece,MO, project
 from .filters import filterr, filterrr
 from django.core.mail import send_mail
@@ -7,6 +9,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
 global fun
 def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
@@ -15,16 +19,49 @@ def creation_prod(request):
 def creation_at(request,num_MO):
 
 
+
     items = piece.objects.filter(num_MO=num_MO)
-
-
-    return render(request, 'create_chef_at.html', {'OFId': 1003211, 'items': items, 'num_MO':num_MO})
-
+    a = request.POST.get("a") # length
+    b = request.POST.get("b") # width
+    c = request.POST.get("c") # thickness
+    d = request.POST.get("d") # id_auto (hidden field)
+    e = request.POST.get("e") # material
+    f = request.POST.get("f") # scheduled_hours_CNC
+    g = request.POST.get("g") # scheduled_hours_laser_cutters
+    h = request.POST.get("h") # scheduled_hours_Router
+    i = request.POST.get("i") # scheduled_hours_milling
+    if d != None:
+        item = piece.objects.get(id_auto=d)
+        item.length = a
+        item.width = b
+        item.thickness = c
+        item.material = e
+        item.scheduled_hours_CNC = f
+        print(f)
+        item.scheduled_hours_laser_cutters = g
+        print(g)
+        item.scheduled_hours_Router = h
+        print(h)
+        item.scheduled_hours_Milling = i
+        item.save()
+        redirect("creation/atelier/num_mo")
+    return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items})
 
 def creation_dem(request):
-    num_mo = "?"
+    num_mo= "0"
+    if request.session.has_key('test'):
+     num_mo = request.session['test']
+
     formmm: formm = formm(request.POST)
     if formmm.is_valid():
+     for i in range(1,200):
+        if len(MO.objects.filter(num_MO=i)) == 0:
+            j = str(i)
+            num_mo = j
+            print(num_mo)
+
+            break
+
      ref = formmm.cleaned_data["project_Reference"]
 
      ref = str(ref)
@@ -33,50 +70,66 @@ def creation_dem(request):
      ref = ref[16:len(ref)]
      print(ref)
 
-     proj = project.objects.get(id_project=ref)
-     print(proj.id_project)
+     proj = project.objects.get(project_Reference=ref)
+     print(proj.project_Reference)
 
-     now = datetime.datetime.now()
-     jours = now.strftime("%d")
-     mois = now.strftime("%m")
-     year = now.strftime("%Y")
-     final = jours + mois + (year[2:4])
-     print(final)
-     num_mo = int_or_0(final)
-     print(num_mo)
-     list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
-     index = len(list_OFf) + 1
-     print(index)
-     index = str(index)
-     num_mo=str(num_mo)
-     num_mo= num_mo + index
-     num_mo = str(num_mo)
-     print(num_mo)
+     #now = datetime.datetime.now()
+     #jours = now.strftime("%d")
+     #mois = now.strftime("%m")
+     #year = now.strftime("%Y")
+     #final = jours + mois + (year[2:4])
+     #print(final)
+     #num_mo = int_or_0(final)
+     #print(num_mo)
+     #list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
+     #index = len(list_OFf) + 1
+     #print(index)
+     #index = str(index)
+     #num_mo=str(num_mo)
+     #num_mo= num_mo + index
+     #num_mo = str(num_mo)
+     #print(num_mo)
      request.session['test'] = num_mo
 
      exemple = MO(project_Reference=proj, num_MO=num_mo, state_MO="waiting for validation", launch_Date=datetime.datetime.now().strftime("%Y-%m-%d"))
      exemple.save()
 
-    form: AllForm = AllForm(request.POST)
+
+    form: AllForm = AllForm(request.POST, request.FILES)
     if form.is_valid():
         abb = form.cleaned_data["id_item"]
+        print(abb)
         abcd = form.cleaned_data["designation"]
         abcde = form.cleaned_data["quantity"]
         abcdef = form.cleaned_data["CNC"]
+        print(abcdef)
         abcdefg = form.cleaned_data["Router"]
         abcdefgh = form.cleaned_data["laser_Cutters"]
+        machines = form.cleaned_data["machines"]
+        two_d = form.cleaned_data["two_d"]
+        print(two_d)
+        three_d = form.cleaned_data["three_d"]
+        abcdefgg = form.cleaned_data["milling"]
+        testt = form.cleaned_data["Test"]
         if request.session.has_key('test'):
             if 1:
                 abc = request.session['test']
                 abc = MO.objects.get(num_MO=abc)
                 print(abc)
 
-                objecttt=piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=abcdef, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgh)
+                objecttt = piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=testt, machines= machines, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgg, two_d= two_d, three_d = three_d)
                 objecttt.save()
+    else:
+        messages.error(request, "not checked")
+        print("successssssssssssssssssssssssssssss")
     pieces = piece.objects.filter(num_MO=9)
     if request.session.has_key('test'):
      print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
      num = request.session['test']
+     if request.POST.get("clear"):
+      num="0"
+      request.session['test'] = num
+
      pieces = piece.objects.filter(num_MO=num)
     page = request.GET.get('page', 1)
     paginator = Paginator(pieces, 10)
@@ -86,7 +139,10 @@ def creation_dem(request):
         piece_list = paginator.page(1)
     except EmptyPage:
         piece_list = paginator.page(paginator.num_pages)
-    return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId': num_mo, 'form': form})
+
+
+
+    return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId':num_mo, 'form': form})
 
 
 def creation_dem1(request):
@@ -104,7 +160,7 @@ def view_mo(request):
     a = MO.objects.all()
     b = filterr(request.GET, queryset=a)
 
-    return render(request, 'Tasks.html', {'a': a, 'b': b})
+    return render(request, 'display_mo.html', {'a': a, 'b': b})
 
 
 def edit_dem(request):
@@ -147,10 +203,9 @@ def edit_at(request):
 
 
 def Tasks(request):
-    a = MO.objects.all()
-    b = filterr(request.GET, queryset=a)
 
-    return render(request, 'Tasks.html', {'a': a, 'b': b})
+
+    return render(request, 'task_history.html')
 
 def delete(request, id_auto):
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -162,13 +217,19 @@ def delete(request, id_auto):
 
 def update(request, id_auto):
     item = piece.objects.get(pk=id_auto)
-    data = {'id_item': '{{item.id_item}}'}
-    form: AllForm = AllForm(request.POST, instance=item, initial=data)
-    print(form.instance.id_auto)
-
-
+    i = get_object_or_404( piece , pk=id_auto)
+    initial_dict={
+        "id_item": item.id_item,
+        "designation": item.designation,
+        "two_d": item.two_d,
+        "three_d": item.three_d,
+    }
+    form: Foorm = Foorm(request.POST or None, request.FILES or None, instance=i, initial=initial_dict)
     if form.is_valid():
-        form.save()
+        a = form.cleaned_data["two_d"]
+        print(a)
+        i = form.save(commit=False)
+        i.save()
         return redirect("/creation")
     return render(request, 'edit_dem.html', {'item': item, 'form': form})
 
@@ -201,4 +262,26 @@ def loginn(request):
         return redirect("/")
     print("failed")
     return render(request, 'login.html', {'username': username})
+
+
+
+def validation(request):
+    return render(request, 'validation_cycle.html')
+
+def Machines(request):
+    return render(request, 'Machines.html')
+def print_mo (request, num_mo):
+    list = piece.objects.filter(num_MO=num_mo)
+    mo = MO.objects.get(num_MO=num_mo)
+    ref = mo.project_Reference
+    lenn = len(list)
+    nb_pages = lenn // 14
+    if lenn % 14 != 0:
+        nb_pages = nb_pages + 1
+    lisst = []
+    for i in range(0, nb_pages):
+        lisst.append(i)
+    print(len(lisst))
+    date = datetime.date.today().strftime('%d/%m/%Y')
+    return render(request, "print.html",{"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date':date})
 
