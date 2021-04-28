@@ -13,11 +13,11 @@
         width:100%;
         border-collapse:collapse;
         text-align:center;
-        font-size:16px;
+        font-size:15px;
 
     }
     table, th, td {
-        padding: 10px;
+        padding: 3px;
         border: 2px solid black
     }
 
@@ -72,8 +72,8 @@
     <thead>
     <tr>
         <th colspan="2">Date: <br>{{ date }}</th>
-        <th colspan="2" style="text-align: left;">PROJET:</th>
-        <th colspan="7" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REF PROJET: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <th colspan="2" style="text-align: left;">PROJET: {{name}}</th>
+        <th colspan="7" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REF PROJET: {{ ref }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             N°OF:
         </th>
     </tr>
@@ -97,7 +97,7 @@
     </tr>
     {% with var=forloop.counter zero=0 subb=forloop.counter|sub:1  %}
 {% for j in list %}
-{% if forloop.counter > subb|mul:14 and forloop.counter <= var|mul:14  %}
+{% if forloop.counter > subb|mul:8 and forloop.counter <= var|mul:8  %}
     <tr>
         <td class="count"></td>
         <td>{{j.quantity}}</td>
@@ -180,6 +180,7 @@
     </tbody>
 
 </table>
+<br>
 <br>
 
 {% endfor %}

@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
    $('.plan3d').removeAttr("required");
 
+
    $(document).on('change', '.machine_choices', function(){
+    $('.machine_choices').removeAttr("required");
       if(this.checked) {
          $('.machine_choices').removeAttr('required');
       }

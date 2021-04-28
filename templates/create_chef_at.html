@@ -1,4 +1,5 @@
 {% load static %}
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +24,8 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
 
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
@@ -429,9 +432,12 @@
                                                 </thead>
                                                 <tbody class="detail">
 
-                                                {% for items in items %}
-                                                <tr>
-                                                    <td>{{items.id_auto}}</td>
+                                                {% for items in piece_list %}
+                                                <tr> {% with var1=forloop.counter var2=piece_list.number|sub:1 produit=piece_list.number|mul:6 %}
+                                                    {% with p=forloop.counter prod=var2|mul:6%}
+                                                    <td> {{var1|add:prod}} </td>
+                                                    {% endwith %}
+                                                    {% endwith %}
                                                     <td>{{items.id_item}}</td>
                                                     <td>{{items.designation}}</td>
                                                     <td>{{items.quantity}}</td>
@@ -442,12 +448,19 @@
                                                             <th>Laser</th>
                                                             <th>Router</th>
                                                             <th>Milling</th>
+                                                            <th>Lathe</th>
                                                             </thead>
                                                             <tbody>
-                                                            <td>{{items.CNC}}</td>
-                                                            <td>{{items.Router}}</td>
-                                                            <td>{{items.laser_Cutters}}</td>
-                                                            <td>{{items.milling}}</td>
+                                                            <td>{% if 'cnc' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
+                                                            </td>
+                                                            <td>{% if 'router' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
+                                                            </td>
+                                                            <td>{% if 'laser_cutter' in items.machines %} &#x2714; {% else %} &#x2716;{% endif %}
+                                                            </td>
+                                                            <td>{% if 'milling' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
+                                                            </td>
+                                                            <td>{% if 'lathe' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
+                                                            </td>
                                                             </tbody>
                                                         </table>
                                                     </td>
@@ -479,13 +492,17 @@
                                                                 <td> Milling</td>
                                                                 </thead>
                                                                 <tbody>
-                                                                <td><input type="number" name="f" value="{{items.scheduled_hours_CNC}}">
+                                                                <td><input type="number" name="f"
+                                                                           value="{{items.scheduled_hours_CNC}}">
                                                                 </td>
-                                                                <td><input type="number" name="g" value="{{items.scheduled_hours_laser_cutters}}">
+                                                                <td><input type="number" name="g"
+                                                                           value="{{items.scheduled_hours_laser_cutters}}">
                                                                 </td>
-                                                                <td><input type="number" name="h" value="{{items.scheduled_hours_Router}}">
+                                                                <td><input type="number" name="h"
+                                                                           value="{{items.scheduled_hours_Router}}">
                                                                 </td>
-                                                                <td><input type="number" name="i" value="{{items.scheduled_hours_Milling}}">
+                                                                <td><input type="number" name="i"
+                                                                           value="{{items.scheduled_hours_Milling}}">
                                                                 </td>
                                                                 </tbody>
                                                             </table>
@@ -505,16 +522,16 @@
                                         </div>
                                         <div class="pagination">
                                     <span class="step-links">
-                                        {% if item_list.has_previous %}
-	                                        <a href="?page={{ item_list.previous_page_number }}">previous</a>
+                                        {% if piece_list.has_previous %}
+	                                        <a href="?page={{ piece_list.previous_page_number }}">previous</a>
                                         {% endif %}
 
                                         <span class="current">
-                                            Page {{ item_list.number }} of {{ item_list.paginator.num_pages }}.
+                                            Page {{ piece_list.number }} of {{ piece_list.paginator.num_pages }}.
                                         </span>
 
-	                                    {% if item_list.has_next %}
-                                            <a href="?page={{ item_list.next_page_number }}">next</a>
+	                                    {% if piece_list.has_next %}
+                                            <a href="?page={{ piece_list.next_page_number }}">next</a>
 	                                    {% endif %}
                                     </span>
                                         </div>

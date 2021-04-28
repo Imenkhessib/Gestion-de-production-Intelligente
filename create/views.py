@@ -1,5 +1,6 @@
 from lib2to3.fixes.fix_input import context
-
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import AllForm, essai, item_form, formm, register, Foorm
 from .models import piece,MO, project
@@ -15,9 +16,8 @@ global fun
 def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
 
-
+@login_required(login_url='login')
 def creation_at(request,num_MO):
-
 
 
     items = piece.objects.filter(num_MO=num_MO)
@@ -45,8 +45,16 @@ def creation_at(request,num_MO):
         item.scheduled_hours_Milling = i
         item.save()
         redirect("creation/atelier/num_mo")
-    return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items})
-
+    page = request.GET.get('page', 1)
+    paginator = Paginator(items, 6)
+    try:
+        piece_list = paginator.page(page)
+    except PageNotAnInteger:
+        piece_list = paginator.page(1)
+    except EmptyPage:
+        piece_list = paginator.page(paginator.num_pages)
+    return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items, "piece_list": piece_list})
+@login_required(login_url='login')
 def creation_dem(request):
     num_mo= "0"
     if request.session.has_key('test'):
@@ -119,6 +127,7 @@ def creation_dem(request):
 
                 objecttt = piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=testt, machines= machines, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgg, two_d= two_d, three_d = three_d)
                 objecttt.save()
+                form = AllForm()
     else:
         messages.error(request, "not checked")
         print("successssssssssssssssssssssssssssss")
@@ -144,7 +153,7 @@ def creation_dem(request):
 
     return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId':num_mo, 'form': form})
 
-
+@login_required(login_url='login')
 def creation_dem1(request):
     if request.method == "POST":
         qty = request.POST["quantity"]
@@ -156,13 +165,16 @@ def creation_dem1(request):
     else:
         return piece_detail(request)
 
+@login_required(login_url='login')
 def view_mo(request):
     a = MO.objects.all()
     b = filterr(request.GET, queryset=a)
 
+
+
     return render(request, 'display_mo.html', {'a': a, 'b': b})
 
-
+@login_required(login_url='login')
 def edit_dem(request):
     if request.session.has_key('test'):
         if 1:
@@ -179,7 +191,7 @@ def edit_dem(request):
 
     return render(request, 'edit_demand.html', {'OFId': 1003211, 'abc': abc})
 
-
+@login_required(login_url='login')
 def edit_prod(request):
     now = datetime.datetime.now()
     jours=now.strftime("%d")
@@ -207,6 +219,7 @@ def Tasks(request):
 
     return render(request, 'task_history.html')
 
+@login_required(login_url='login')
 def delete(request, id_auto):
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     piece_example = piece.objects.filter(pk=id_auto)
@@ -215,6 +228,7 @@ def delete(request, id_auto):
     #return render(request, 'login.html')
     return redirect("/creation")
 
+@login_required(login_url='login')
 def update(request, id_auto):
     item = piece.objects.get(pk=id_auto)
     i = get_object_or_404( piece , pk=id_auto)
@@ -264,24 +278,34 @@ def loginn(request):
     return render(request, 'login.html', {'username': username})
 
 
-
+@login_required(login_url='login')
 def validation(request):
     return render(request, 'validation_cycle.html')
 
+@login_required(login_url='login')
 def Machines(request):
     return render(request, 'Machines.html')
+
+@login_required(login_url='login')
 def print_mo (request, num_mo):
     list = piece.objects.filter(num_MO=num_mo)
     mo = MO.objects.get(num_MO=num_mo)
     ref = mo.project_Reference
+    ref = str(ref)
+    size = len(ref)
+    ref = ref[:size - 1]
+    ref = ref[16:len(ref)]
+    print(ref)
+    proj = project.objects.get(project_Reference=ref)
+    name = proj.name_project
     lenn = len(list)
-    nb_pages = lenn // 14
-    if lenn % 14 != 0:
+    nb_pages = lenn // 8
+    if lenn % 8 != 0:
         nb_pages = nb_pages + 1
     lisst = []
     for i in range(0, nb_pages):
         lisst.append(i)
     print(len(lisst))
     date = datetime.date.today().strftime('%d/%m/%Y')
-    return render(request, "print.html",{"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date':date})
+    return render(request, "print.html",{"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date':date, 'name': name})
 

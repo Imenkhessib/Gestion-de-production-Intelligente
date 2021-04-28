@@ -54,11 +54,11 @@ class piece (models.Model):
     laser_Cutters = models.BooleanField()
     milling = models.BooleanField()
     machine_choices = (
-        ('cnc', 'cnc'),
-        ('router', 'router'),
-        ('milling', 'milling'),
-        ('lathe', 'lathe'),
-        ('laser_cutter', 'laser_cutter'),
+        ('cnc', 'CNC'),
+        ('router', 'Router'),
+        ('milling', 'Milling'),
+        ('lathe', 'Lathe'),
+        ('laser_cutter', 'Laser Cutter'),
     )
     machines = MultiSelectField(choices=machine_choices, blank=False)
     scheduled_hours_CNC = models.IntegerField(default=0, null=True)

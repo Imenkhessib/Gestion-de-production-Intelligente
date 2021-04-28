@@ -56,7 +56,7 @@ class Foorm(forms.ModelForm):
             'quantity': forms.NumberInput(
                 attrs={'id': 'quantity', 'class': "form-control form-control-user", 'type': "number"}),
             'machines': forms.CheckboxSelectMultiple(
-                attrs={'id': 'machinery', 'required': 'True', 'class': 'machine_choices'}
+                attrs={'id': 'machinery', 'class': 'machine_choices'}
             ),
             'three_d': forms.FileInput(
                 attrs={'class': 'plan3d'}),
