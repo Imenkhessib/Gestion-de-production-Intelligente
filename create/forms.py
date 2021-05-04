@@ -39,6 +39,21 @@ class AllForm(forms.ModelForm):
         }
 
 
+class mo_cause(forms.ModelForm):
+    class Meta:
+        model = MO
+        fields = 'cause_invalid',
+        widgets = {
+            'cause_invalid': forms.Textarea(
+                attrs={'required': 'True', 'label': 'Precise the cause of invalidation',
+                       'rows': '4',
+                       'cols': '60',
+                       'maxlength': '200',
+                       'class': "form-control form-control-user"}
+            )
+        }
+
+
 class Foorm(forms.ModelForm):
     Test = forms.BooleanField(required=False, initial=False)
 
@@ -69,7 +84,7 @@ class Foorm(forms.ModelForm):
 class essai(forms.ModelForm):
     class Meta:
         model = project
-        fields = ('project_Reference', 'name_project', 'client', 'project_chief')
+        fields = ('project_Reference', 'name_project', 'client')
 
 
 class item_form(forms.ModelForm):

@@ -1,17 +1,19 @@
 from lib2to3.fixes.fix_input import context
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import AllForm, essai, item_form, formm, register, Foorm
+from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause
 from .models import piece,MO, project
 from .filters import filterr, filterrr
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 global fun
 def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
@@ -56,13 +58,16 @@ def creation_at(request,num_MO):
     return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items, "piece_list": piece_list})
 @login_required(login_url='login')
 def creation_dem(request):
-    num_mo= "0"
+    ref = "0"
+    if request.session.has_key('proj'):
+        ref = request.session['proj']
+    num_mo = "0"
     if request.session.has_key('test'):
      num_mo = request.session['test']
 
     formmm: formm = formm(request.POST)
     if formmm.is_valid():
-     for i in range(1,200):
+     for i in range(1,10000):
         if len(MO.objects.filter(num_MO=i)) == 0:
             j = str(i)
             num_mo = j
@@ -80,6 +85,7 @@ def creation_dem(request):
 
      proj = project.objects.get(project_Reference=ref)
      print(proj.project_Reference)
+     request.session['proj'] = ref
 
      #now = datetime.datetime.now()
      #jours = now.strftime("%d")
@@ -136,9 +142,28 @@ def creation_dem(request):
      print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
      num = request.session['test']
      if request.POST.get("clear"):
+      subject, from_email, to = 'MO Confirmation', 'pferadh2021@gmail.com', 'imen.khessib@isticbc.org'
+      text_content = 'This is an important message.'
+      date_confirm = str(datetime.date.today())
+
+      request.session['date_confirm'] = date_confirm
+      newnew=MO.objects.get(num_MO=num_mo)
+      newnew.mechanical_engineer = request.user
+      newnew.save()
+
+      context = {
+             'num_mo': num_mo,
+         }
+      msg_html = render_to_string('email_valid.html', context)
+
+      msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+      msg.attach_alternative(msg_html, "text/html")
+      msg.send()
+
+      ref="0"
       num="0"
       request.session['test'] = num
-
+      request.session['proj'] = ref
      pieces = piece.objects.filter(num_MO=num)
     page = request.GET.get('page', 1)
     paginator = Paginator(pieces, 10)
@@ -151,7 +176,7 @@ def creation_dem(request):
 
 
 
-    return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId':num_mo, 'form': form})
+    return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId':num_mo, 'form': form, 'proj': ref})
 
 @login_required(login_url='login')
 def creation_dem1(request):
@@ -279,8 +304,70 @@ def loginn(request):
 
 
 @login_required(login_url='login')
-def validation(request):
-    return render(request, 'validation_cycle.html')
+def validation(request, num_mo):
+    uu = User.objects.get(username="production")
+    uu.first_name = "Amine"
+    uu.last_name = "Daami"
+    uu.save()
+
+    uuu = User.objects.get(username="atelier")
+    uuu.first_name = "Amine"
+    uuu.last_name = "Jemmi"
+    uuu.save()
+
+    var = MO.objects.get(num_MO=num_mo)
+    demandeur = User.objects.get(id=var.mechanical_engineer.id)
+    proj_ref = var.project_Reference
+    print(proj_ref)
+    i = get_object_or_404(MO, pk=num_mo)
+    ref = str(proj_ref)
+    size = len(ref)
+    ref = ref[:size - 1]
+    ref = ref[16:len(ref)]
+    var1 = project.objects.get(project_Reference=ref)
+    proj_manager = User.objects.get(id=var1.project_chief.id)
+    print(var1)
+    mo_form: mo_cause = mo_cause(request.POST, instance=i)
+    date_confirm_dem = request.session.get('date_confirm')
+    var.date_val_dem = date_confirm_dem
+    date_conf = "date"
+
+    if mo_form.is_valid():
+        cause = mo_form.cleaned_data["cause_invalid"]
+        i.cause_invalid = cause
+        i.save()
+        subject, from_email, to = 'MO Invalidation', 'pferadh2021@gmail.com', 'imen.khessib@isticbc.org'
+        text_content = 'This is an important message.'
+        context = {
+            'cause': cause,
+            'num_mo': num_mo,
+        }
+        msg_html = render_to_string('email.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+    else:
+        print(mo_form.errors)
+
+    if request.POST.get("validate"):
+        subject, from_email, to = 'MO Confirmation', 'pferadh2021@gmail.com', 'imen.khessib@isticbc.org'
+        text_content = 'This is an important message.'
+        context = {
+            'num_mo': num_mo,
+        }
+        msg_html = render_to_string('email_valid.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+        date_conf = str(datetime.date.today())
+
+    return render(request, 'validation_cycle.html',
+                  {'OFId': num_mo, 'proj': ref, 'mo_form': mo_form, 'proj_manager': proj_manager,
+                   'date_confirm_dem': date_confirm_dem, 'date_conf': date_conf,'demandeur':demandeur})
+
 
 @login_required(login_url='login')
 def Machines(request):
@@ -299,8 +386,8 @@ def print_mo (request, num_mo):
     proj = project.objects.get(project_Reference=ref)
     name = proj.name_project
     lenn = len(list)
-    nb_pages = lenn // 8
-    if lenn % 8 != 0:
+    nb_pages = lenn // 15
+    if lenn % 15 != 0:
         nb_pages = nb_pages + 1
     lisst = []
     for i in range(0, nb_pages):

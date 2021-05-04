@@ -1,5 +1,6 @@
 from django.db import models
 from multiselectfield import MultiSelectField
+from django.contrib.auth.models import User
 
 #from viewflow.fields import CompositeKey
 
@@ -11,7 +12,7 @@ class project(models.Model):
     name_project = models.CharField(max_length=50)
     client = models.CharField(max_length=50)
     Purchase_Order = models.CharField(max_length=50, null=True)
-    project_chief = models.CharField(max_length=50)
+    project_chief = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.id_auto = project.objects.all().count() + 1
@@ -24,12 +25,18 @@ class MO (models.Model):
     priority_MO = models.IntegerField(null=True)
     launch_Date = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
     state_MO = models.CharField(max_length=60)
+    mechanical_engineer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     #date_dem_prev = models.DateField(default=False)
     #date_dem_real = models.DateField(default=False)
     #date_cloture_prev = models.DateField(default=False)
     #date_cloture_act = models.DateField(default=False)
-    #date_cloture_real = models.DateField(default=False)
-    project_Reference = models.ForeignKey(project, on_delete=models.CASCADE, default=False)
+    date_val_dem = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
+    date_val_respval = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
+    date_val_chefproj = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
+    date_val_respprod = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
+    date_val_chefat = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))
+    cause_invalid = models.TextField()
+    project_Reference = models.ForeignKey(project, on_delete=models.CASCADE)
     def save(self, *args, **kwargs):
         self.id_auto = MO.objects.all().count() + 1
         super(MO, self).save()
@@ -93,7 +100,7 @@ class task(models.Model):
     id_machine = models.ForeignKey(machine, on_delete=models.CASCADE)
 
 class user (models.Model):
-    id_user = models.CharField(max_length=50, primary_key=True)
+    id = models.CharField(max_length=50, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     e_mail = models.EmailField(max_length=50)
@@ -105,7 +112,7 @@ class access_control(models.Model):
     is_admin = models.BooleanField()
     application_name = models.CharField(max_length=50)
     id_user = models.ForeignKey(user, on_delete=models.CASCADE)
-   # id = CompositeKey(columns=['application_name', 'id_user'])
+
 
 class machine_operator(models.Model):
     id_operator = models.ForeignKey(user, on_delete=models.CASCADE, primary_key=True)

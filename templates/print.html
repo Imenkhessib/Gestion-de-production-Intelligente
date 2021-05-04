@@ -17,7 +17,7 @@
 
     }
     table, th, td {
-        padding: 3px;
+        padding: 0px;
         border: 2px solid black
     }
 
@@ -97,7 +97,7 @@
     </tr>
     {% with var=forloop.counter zero=0 subb=forloop.counter|sub:1  %}
 {% for j in list %}
-{% if forloop.counter > subb|mul:8 and forloop.counter <= var|mul:8  %}
+{% if forloop.counter > subb|mul:15 and forloop.counter <= var|mul:15  %}
     <tr>
         <td class="count"></td>
         <td>{{j.quantity}}</td>

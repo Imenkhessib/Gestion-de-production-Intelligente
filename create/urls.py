@@ -14,9 +14,12 @@ urlpatterns = [
     path('update/<int:id_auto>', views.update, name='update'),
     path('view_mo', views.view_mo, name='view_mo'),
     path('loginn', views.loginn, name='login'),
-    path('validation', views.validation, name='validation'),
+    path('validation/<int:num_mo>', views.validation, name='validation'),
     path('Machines', views.Machines, name='Machines'),
     path('atelier', views.creation_at, name='atelier'),
+    path('validation/<int:num_mo>', views.validation, name='email'),
+    path('validation/<int:num_mo>', views.creation_dem, name='email_valid'),
     path('print/<int:num_mo>', views.print_mo, name='print'),
+
 
 ]

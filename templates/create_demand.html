@@ -84,7 +84,7 @@
                     <h6 class="collapse-header">Manage MO:</h6>
                     <a class="collapse-item" href="{% url 'view_mo' %}">View</a>
                     <a class="collapse-item active" href="{% url 'create_dem' %}">Create</a>
-                    <a class="collapse-item" href="{% url 'validation' %}">Validation cycle</a>
+
 
                 </div>
             </div>
@@ -364,7 +364,7 @@
                                 Production manager
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'login' %}" data-toggle="modal"
+                            <a class="dropdown-item" href="#" data-toggle="modal"
                                data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
@@ -528,11 +528,13 @@
                                     </form>
                                     <div class="d-flex">
                                             <div class="p-2">
+                                            <!--   {% if proj != "0" %} -->
                                         <button data-toggle="modal" data-target="#insertModal"
                                             class="btn btn-outline-primary">
                                         <i class="fas fa-plus"></i>
                                         Add item
                                     </button>
+                                            <!--    {% endif %} -->
                                             </div>
                                     <div class="ml-auto p-2">
                                     <form action="/creation/print/{{OFId}}">
