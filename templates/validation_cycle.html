@@ -138,7 +138,7 @@
    </ul>
    <!-- End of Sidebar -->
 
-   <div class="modal fade" id="invalidate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+   <div class="modal fade" id="invalidate_proj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
       <div class="modal-dialog" role="document">
          <div class="modal-content">
@@ -158,13 +158,100 @@
                <div class="modal-footer">
 
                   <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <button class="btn btn-danger" type="submit">Confirm</button>
+                  <button class="btn btn-danger" type="submit" name="inv_proj">Confirm</button>
 
                </div>
             </form>
          </div>
       </div>
    </div>
+
+
+   <div class="modal fade" id="invalidate_val" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <form action="" method="post">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                  </button>
+               </div>
+               <div class="modal-body">What is the reason why you want to invalidate this Manufacturing Order?
+
+                  {% csrf_token %}
+                  {{mo_form.cause_invalid}}
+
+               </div>
+               <div class="modal-footer">
+
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-danger" type="submit" name="inval_eng">Confirm</button>
+
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal fade" id="invalidate_prod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <form action="" method="post">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                  </button>
+               </div>
+               <div class="modal-body">What is the reason why you want to invalidate this Manufacturing Order?
+
+                  {% csrf_token %}
+                  {{mo_form.cause_invalid}}
+
+               </div>
+               <div class="modal-footer">
+
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-danger" type="submit" name="inval_prod">Confirm</button>
+
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal fade" id="invalidate_atelier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <form action="" method="post">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                  </button>
+               </div>
+               <div class="modal-body">What is the reason why you want to invalidate this Manufacturing Order?
+
+                  {% csrf_token %}
+                  {{mo_form.cause_invalid}}
+
+               </div>
+               <div class="modal-footer">
+
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-danger" type="submit" name="inval_at">Confirm</button>
+
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+
    <!-- Content Wrapper -->
    <div id="content-wrapper" class="d-flex flex-column">
 
@@ -425,13 +512,15 @@
                            <td>Technical department</td>
                            <td>{{demandeur.first_name}} {{demandeur.last_name}}</td>
                            {% if request.user.id == demandeur.id %}
+                           <form method="POST">
                            <td class="align-middle text-center">
                               <button class="btn btn-success" type="submit"
-                                      value="Submit">Validate
+                                      value="Submit" disabled>Validate
                               </button>
+                           </form>
                               <button class="btn btn-danger" type="submit"
                                       value="Submit" data-toggle="modal"
-                                      data-target="#invalidate">Invalidate
+                                      data-target="#invalidate" disabled>Invalidate
                               </button>
                            </td>
                            {% else %}
@@ -445,32 +534,33 @@
                               </button>
                            </td>
                            {% endif %}
-                           <td>{{date_confirm_dem}}</td>
+                           <td>{{var.date_val_dem}}</td>
                         </tr>
                         <tr>
                            <td>Project manager</td>
                            <td>{{proj_manager.first_name}} {{proj_manager.last_name}}</td>
                             {% if request.user.id == proj_manager.id %}
-                           <form method="POST">
+                              <form method="POST">
                            <td class="align-middle text-center">
                                  {% csrf_token %}
                                  <button class="btn btn-success" type="submit"
-                                         value="Submit" name="validate">Validate
+                                         value="Submit" name="validate_proj">Validate
                                  </button>
-                                 <button class="btn btn-danger" type="submit"
-                                      value="Submit" data-toggle="modal"
-                                      data-target="#invalidate">Invalidate
+                               </form>
+                                 <button class="btn btn-danger"  data-toggle="modal" name="inval_proj"
+                                      data-target="#invalidate_proj">Invalidate
                                  </button>
                            </td>
-                           </form>
+
                            {%else %}
                            <form method="POST">
                             <td class="align-middle text-center">
 
                                  {% csrf_token %}
                                  <button class="btn btn-success" type="submit"
-                                         disabled=true value="Submit" name="validate">Validate
+                                         disabled=true value="Submit">Validate
                                  </button>
+                               </form>
                               <button class="btn btn-danger" type="submit"
                                       disabled=true value="Submit" data-toggle="modal"
                                       data-target="#invalidate">Invalidate
@@ -479,7 +569,7 @@
                            </td>
                             </form>
                             {% endif%}
-                           <td>{{date_conf}}</td>
+                           <td>{{var.date_val_chefproj}}</td>
                         </tr>
                         <tr>
                            <td>Validation</td>
@@ -490,14 +580,16 @@
                            <td class="align-middle text-center">
                               {% csrf_token %}
                               <button class="btn btn-success" type="submit"
-                                      value="Submit" name="validate">Validate
+                                      value="Submit" name="val_eng" >Validate
                               </button>
+                              </form>
                               <button class="btn btn-danger " type="submit"
                                       value="Submit" data-toggle="modal"
-                                      data-target="#invalidate">Invalidate
+                                      data-target="#invalidate_val">Invalidate
                               </button>
+
                            </td>
-                              </form>
+
                            {% else %}
                            <td class="align-middle text-center">
                               <button class="btn btn-success" type="submit"
@@ -509,19 +601,22 @@
                               </button>
                            </td>
                            {% endif %}
-                           <td></td>
+                           <td>{{var.date_val_respval}}</td>
                         </tr>
                         <tr>
                            <td>Production manager</td>
                            <td>A.Daami</td>
                            {% if request.user.id == 5 %}
+                           <form method="POST">
+                              {% csrf_token %}
                            <td class="align-middle text-center">
                               <button class="btn btn-success" type="submit"
-                                      value="Submit">Validate
+                                      value="Submit" name="val_prod" >Validate
                               </button>
+                              </form>
                               <button class="btn btn-danger" type="submit"
-                                      value="Submit" data-toggle="modal"
-                                      data-target="#invalidate">Invalidate
+                                      value="Submit" data-toggle="modal" name="inval_prod"
+                                      data-target="#invalidate_prod">Invalidate
                               </button>
                            </td>
                            {% else %}
@@ -535,19 +630,21 @@
                               </button>
                            </td>
                            {% endif %}
-                           <td>dd/mm/yy</td>
+                           <td>{{var.date_val_respprod}}</td>
                         </tr>
                         <tr>
                            <td>Workshop Chief</td>
                            <td>A.Jemmi</td>
                            {% if request.user.id == 6 %}
+                            <form method="POST">
                            <td class="align-middle text-center">
                               <button class="btn btn-success" type="submit"
                                       value="Submit">Validate
                               </button>
+                              </form>
                               <button class="btn btn-danger" type="submit"
                                       value="Submit" data-toggle="modal"
-                                      data-target="#invalidate">Invalidate
+                                      data-target="#invalidate_atelier">Invalidate
                               </button>
                            </td>
                            {% else %}
@@ -561,7 +658,7 @@
                               </button>
                            </td>
                            {% endif %}
-                           <td>dd/mm/yy</td>
+                           <td>{{var.date_val_chefat}}</td>
                         </tr>
                         </tbody>
                      </table>

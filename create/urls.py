@@ -20,6 +20,6 @@ urlpatterns = [
     path('validation/<int:num_mo>', views.validation, name='email'),
     path('validation/<int:num_mo>', views.creation_dem, name='email_valid'),
     path('print/<int:num_mo>', views.print_mo, name='print'),
-
-
+    path('updatee/<int:num_mo>', views.create_dem_validate),
+    path('updateee/<int:id_auto>', views.edit_item),
 ]
