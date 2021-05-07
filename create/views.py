@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause
-from .models import piece,MO, project
+from .models import piece, MO, project
 from .filters import filterr, filterrr
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
@@ -14,24 +14,26 @@ import datetime
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+
 global fun
+
+
 def creation_prod(request):
     return render(request, 'create_resp_prod.html', {'OFId': 1003211})
 
+
 @login_required(login_url='login')
-def creation_at(request,num_MO):
-
-
+def creation_at(request, num_MO):
     items = piece.objects.filter(num_MO=num_MO)
-    a = request.POST.get("a") # length
-    b = request.POST.get("b") # width
-    c = request.POST.get("c") # thickness
-    d = request.POST.get("d") # id_auto (hidden field)
-    e = request.POST.get("e") # material
-    f = request.POST.get("f") # scheduled_hours_CNC
-    g = request.POST.get("g") # scheduled_hours_laser_cutters
-    h = request.POST.get("h") # scheduled_hours_Router
-    i = request.POST.get("i") # scheduled_hours_milling
+    a = request.POST.get("a")  # length
+    b = request.POST.get("b")  # width
+    c = request.POST.get("c")  # thickness
+    d = request.POST.get("d")  # id_auto (hidden field)
+    e = request.POST.get("e")  # material
+    f = request.POST.get("f")  # scheduled_hours_CNC
+    g = request.POST.get("g")  # scheduled_hours_laser_cutters
+    h = request.POST.get("h")  # scheduled_hours_Router
+    i = request.POST.get("i")  # scheduled_hours_milling
     if d != None:
         item = piece.objects.get(id_auto=d)
         item.length = a
@@ -56,6 +58,8 @@ def creation_at(request,num_MO):
     except EmptyPage:
         piece_list = paginator.page(paginator.num_pages)
     return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items, "piece_list": piece_list})
+
+
 @login_required(login_url='login')
 def creation_dem(request):
     ref = "0"
@@ -63,251 +67,53 @@ def creation_dem(request):
         ref = request.session['proj']
     num_mo = "0"
     if request.session.has_key('test'):
-     num_mo = request.session['test']
+        num_mo = request.session['test']
 
     formmm: formm = formm(request.POST)
     if formmm.is_valid():
-     for i in range(1,10000):
-        if len(MO.objects.filter(num_MO=i)) == 0:
-            j = str(i)
-            num_mo = j
-            print(num_mo)
+        for i in range(1, 10000):
+            if len(MO.objects.filter(num_MO=i)) == 0:
+                j = str(i)
+                num_mo = j
+                print(num_mo)
 
-            break
+                break
 
-     ref = formmm.cleaned_data["project_Reference"]
+        ref = formmm.cleaned_data["project_Reference"]
 
-     ref = str(ref)
-     size = len(ref)
-     ref = ref[:size - 1]
-     ref = ref[16:len(ref)]
-     print(ref)
+        ref = str(ref)
+        size = len(ref)
+        ref = ref[:size - 1]
+        ref = ref[16:len(ref)]
+        print(ref)
 
-     proj = project.objects.get(project_Reference=ref)
-     print(proj.project_Reference)
-     request.session['proj'] = ref
+        proj = project.objects.get(project_Reference=ref)
+        print(proj.project_Reference)
+        request.session['proj'] = ref
 
-     #now = datetime.datetime.now()
-     #jours = now.strftime("%d")
-     #mois = now.strftime("%m")
-     #year = now.strftime("%Y")
-     #final = jours + mois + (year[2:4])
-     #print(final)
-     #num_mo = int_or_0(final)
-     #print(num_mo)
-     #list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
-     #index = len(list_OFf) + 1
-     #print(index)
-     #index = str(index)
-     #num_mo=str(num_mo)
-     #num_mo= num_mo + index
-     #num_mo = str(num_mo)
-     #print(num_mo)
-     request.session['test'] = num_mo
+        # now = datetime.datetime.now()
+        # jours = now.strftime("%d")
+        # mois = now.strftime("%m")
+        # year = now.strftime("%Y")
+        # final = jours + mois + (year[2:4])
+        # print(final)
+        # num_mo = int_or_0(final)
+        # print(num_mo)
+        # list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
+        # index = len(list_OFf) + 1
+        # print(index)
+        # index = str(index)
+        # num_mo=str(num_mo)
+        # num_mo= num_mo + index
+        # num_mo = str(num_mo)
+        # print(num_mo)
+        request.session['test'] = num_mo
 
-     exemple = MO(project_Reference=proj, num_MO=num_mo, state_MO="waiting for validation", launch_Date=datetime.datetime.now().strftime("%Y-%m-%d"))
-     exemple.save()
+        exemple = MO(project_Reference=proj, num_MO=num_mo, state_MO="waiting for validation",
+                     launch_Date=datetime.datetime.now().strftime("%Y-%m-%d"))
+        exemple.save()
 
-#***************************************************************
-    form: AllForm = AllForm(request.POST, request.FILES)
-    if form.is_valid():
-        abb = form.cleaned_data["id_item"]
-        print(abb)
-        abcd = form.cleaned_data["designation"]
-        abcde = form.cleaned_data["quantity"]
-        abcdef = form.cleaned_data["CNC"]
-        print(abcdef)
-        abcdefg = form.cleaned_data["Router"]
-        abcdefgh = form.cleaned_data["laser_Cutters"]
-        machines = form.cleaned_data["machines"]
-        two_d = form.cleaned_data["two_d"]
-        print(two_d)
-        three_d = form.cleaned_data["three_d"]
-        abcdefgg = form.cleaned_data["milling"]
-        testt = form.cleaned_data["Test"]
-        if request.session.has_key('test'):
-            if 1:
-                abc = request.session['test']
-                abc = MO.objects.get(num_MO=abc)
-                print(abc)
-
-                objecttt = piece(num_MO=abc, id_item=abb, designation = abcd, quantity = abcde, CNC=testt, machines= machines, Router=abcdefg, laser_Cutters=abcdefgh, milling=abcdefgg, two_d= two_d, three_d = three_d)
-                objecttt.save()
-                form = AllForm()
-    else:
-        messages.error(request, "not checked")
-        print("successssssssssssssssssssssssssssss")
-    pieces = piece.objects.filter(num_MO=9)
-    if request.session.has_key('test'):
-     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-     num = request.session['test']
-     if request.POST.get("clear"):
-      projj = project.objects.get(project_Reference=ref)
-
-      subject = 'MO Confirmation'
-      from_email = 'pferadh2021@gmail.com'
-      to_emails = projj.project_chief.email, request.user.email
-
-      newnew=MO.objects.get(num_MO=num_mo)
-      newnew.mechanical_engineer = request.user
-      newnew.date_val_dem = str(datetime.date.today())
-      newnew.save()
-
-      context = {
-            'num_mo': num_mo,
-            'a' : request.user
-         }
-      msg_html = render_to_string('email_valid.html', context)
-
-      msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
-      msg.attach_alternative(msg_html, "text/html")
-      msg.send()
-
-      ref="0"
-      num="0"
-      request.session['test'] = num
-      request.session['proj'] = ref
-     pieces = piece.objects.filter(num_MO=num)
-    page = request.GET.get('page', 1)
-    paginator = Paginator(pieces, 10)
-    try:
-        piece_list = paginator.page(page)
-    except PageNotAnInteger:
-        piece_list = paginator.page(1)
-    except EmptyPage:
-        piece_list = paginator.page(paginator.num_pages)
-
-
-
-    return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId':num_mo, 'form': form, 'proj': ref})
-
-@login_required(login_url='login')
-def creation_dem1(request):
-    if request.method == "POST":
-        qty = request.POST["quantity"]
-        ref = request.POST["ref"]
-        desig = request.POST["desig"]
-
-        return render(request, 'create_demand.html', {'OFId': 1003211, 'qty': qty, 'ref': ref, 'desig': desig})
-
-    else:
-        return piece_detail(request)
-
-@login_required(login_url='login')
-def view_mo(request):
-    a = MO.objects.all()
-    b = filterr(request.GET, queryset=a)
-
-
-
-    return render(request, 'display_mo.html', {'a': a, 'b': b})
-
-@login_required(login_url='login')
-def edit_dem(request):
-    if request.session.has_key('test'):
-        if 1:
-            abc = request.session['test']
-            print(abc)
-
-    send_mail(
-        "radhwen",
-        "a new Manufacturing Order is made by Mr:" + request.user.username + ". please join the link to validate MO number:  " + abc + " \n 192.168.1.101:8000",
-        "elhifradwen14@gmail.com",
-        ['mohamedradhouan.elhif@isticbc.org'],
-    )
-    print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
-
-    return render(request, 'edit_demand.html', {'OFId': 1003211, 'abc': abc})
-
-@login_required(login_url='login')
-def edit_prod(request):
-    now = datetime.datetime.now()
-    jours=now.strftime("%d")
-    mois=now.strftime("%m")
-    year=now.strftime("%Y")
-    final = jours+mois+(year[2:4])
-    print(final)
-    num_mo = int_or_0(final)
-    print(num_mo)
-    list_OF = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
-    index = len(list_OF)
-    print(index)
-    indexx = int_or_0(index)
-    num_mo = num_mo*10 + indexx + 1
-    print(num_mo)
-    return render(request, 'edit_resp_prod.html', {'OFId': 1003211})
-
-
-def edit_at(request):
-    return render(request, 'edit_dem.html', {'OFId': 1003211})
-
-
-def Tasks(request):
-
-
-    return render(request, 'task_history.html')
-
-@login_required(login_url='login')
-def delete(request, id_auto):
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    piece_example = piece.objects.filter(pk=id_auto)
-    piece_example.delete()
-
-    #return render(request, 'login.html')
-    return redirect("/creation")
-
-@login_required(login_url='login')
-def update(request, id_auto):
-    item = piece.objects.get(pk=id_auto)
-    i = get_object_or_404( piece , pk=id_auto)
-    initial_dict={
-        "id_item": item.id_item,
-        "designation": item.designation,
-        "two_d": item.two_d,
-        "three_d": item.three_d,
-    }
-    form: Foorm = Foorm(request.POST or None, request.FILES or None, instance=i, initial=initial_dict)
-    if form.is_valid():
-        a = form.cleaned_data["two_d"]
-        print(a)
-        i = form.save(commit=False)
-        i.save()
-        return redirect("/creation")
-    return render(request, 'edit_dem.html', {'item': item, 'form': form})
-
-
-def piece_detail(request):
-    template_name = "create_demand.html"
-    pieces = piece.objects.all()
-
-    context = {'pieces': pieces}
-    resp = render(request, template_name, context)
-    return resp
-
-
-def int_or_0(value):
-    try:
-        return int(value)
-    except:
-        return 0
-def loginn(request):
-    logout(request)
-    username = request.POST.get("exampleInputEmail")
-    password = request.POST.get("exampleInputPassword")
-    print(username)
-    print(password)
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        request.session["user_name"] = username
-        print("successssssss")
-        login(request, user)
-        return redirect("/")
-    print("failed")
-    return render(request, 'login.html', {'username': username})
-
-@login_required(login_url='login')
-def create_dem_validate(request, num_mo):
-    OF = MO.objects.get(num_MO=num_mo)
+    # ***************************************************************
     form: AllForm = AllForm(request.POST, request.FILES)
     if form.is_valid():
         abb = form.cleaned_data["id_item"]
@@ -343,6 +149,210 @@ def create_dem_validate(request, num_mo):
         print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         num = request.session['test']
         if request.POST.get("clear"):
+            projj = project.objects.get(project_Reference=ref)
+
+            subject = 'MO Confirmation'
+            from_email = 'pferadh2021@gmail.com'
+            to_emails = projj.project_chief.email, request.user.email
+
+            newnew = MO.objects.get(num_MO=num_mo)
+            newnew.mechanical_engineer = request.user
+            newnew.date_val_dem = str(datetime.date.today())
+            newnew.save()
+
+            context = {
+                'num_mo': num_mo,
+                'a': request.user
+            }
+            msg_html = render_to_string('email_valid.html', context)
+
+            msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
+            msg.attach_alternative(msg_html, "text/html")
+            msg.send()
+
+            ref = "0"
+            num = "0"
+            request.session['test'] = num
+            request.session['proj'] = ref
+        pieces = piece.objects.filter(num_MO=num)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(pieces, 10)
+    try:
+        piece_list = paginator.page(page)
+    except PageNotAnInteger:
+        piece_list = paginator.page(1)
+    except EmptyPage:
+        piece_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'create_demand.html',
+                  {'formm': formmm, 'piece_list': piece_list, 'OFId': num_mo, 'form': form, 'proj': ref})
+
+
+@login_required(login_url='login')
+def creation_dem1(request):
+    if request.method == "POST":
+        qty = request.POST["quantity"]
+        ref = request.POST["ref"]
+        desig = request.POST["desig"]
+
+        return render(request, 'create_demand.html', {'OFId': 1003211, 'qty': qty, 'ref': ref, 'desig': desig})
+
+    else:
+        return piece_detail(request)
+
+
+@login_required(login_url='login')
+def view_mo(request):
+    a = MO.objects.all()
+    b = filterr(request.GET, queryset=a)
+
+    return render(request, 'display_mo.html', {'a': a, 'b': b})
+
+
+@login_required(login_url='login')
+def edit_dem(request):
+    if request.session.has_key('test'):
+        if 1:
+            abc = request.session['test']
+            print(abc)
+
+    send_mail(
+        "radhwen",
+        "a new Manufacturing Order is made by Mr:" + request.user.username + ". please join the link to validate MO number:  " + abc + " \n 192.168.1.101:8000",
+        "elhifradwen14@gmail.com",
+        ['mohamedradhouan.elhif@isticbc.org'],
+    )
+    print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+
+    return render(request, 'edit_demand.html', {'OFId': 1003211, 'abc': abc})
+
+
+@login_required(login_url='login')
+def edit_prod(request):
+    now = datetime.datetime.now()
+    jours = now.strftime("%d")
+    mois = now.strftime("%m")
+    year = now.strftime("%Y")
+    final = jours + mois + (year[2:4])
+    print(final)
+    num_mo = int_or_0(final)
+    print(num_mo)
+    list_OF = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
+    index = len(list_OF)
+    print(index)
+    indexx = int_or_0(index)
+    num_mo = num_mo * 10 + indexx + 1
+    print(num_mo)
+    return render(request, 'edit_resp_prod.html', {'OFId': 1003211})
+
+
+def edit_at(request):
+    return render(request, 'edit_dem.html', {'OFId': 1003211})
+
+
+def Tasks(request):
+    return render(request, 'task_history.html')
+
+
+@login_required(login_url='login')
+def delete(request, id_auto):
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    piece_example = piece.objects.filter(pk=id_auto)
+    piece_example.delete()
+
+    # return render(request, 'login.html')
+    return redirect("/creation")
+
+
+@login_required(login_url='login')
+def update(request, id_auto):
+    item = piece.objects.get(pk=id_auto)
+    i = get_object_or_404(piece, pk=id_auto)
+    initial_dict = {
+        "id_item": item.id_item,
+        "designation": item.designation,
+        "two_d": item.two_d,
+        "three_d": item.three_d,
+    }
+    form: Foorm = Foorm(request.POST or None, request.FILES or None, instance=i, initial=initial_dict)
+    if form.is_valid():
+        a = form.cleaned_data["two_d"]
+        print(a)
+        i = form.save(commit=False)
+        i.save()
+        return redirect("/creation")
+    return render(request, 'edit_dem.html', {'item': item, 'form': form})
+
+
+def piece_detail(request):
+    template_name = "create_demand.html"
+    pieces = piece.objects.all()
+
+    context = {'pieces': pieces}
+    resp = render(request, template_name, context)
+    return resp
+
+
+def int_or_0(value):
+    try:
+        return int(value)
+    except:
+        return 0
+
+
+def loginn(request):
+    logout(request)
+    username = request.POST.get("exampleInputEmail")
+    password = request.POST.get("exampleInputPassword")
+    print(username)
+    print(password)
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        request.session["user_name"] = username
+        print("successssssss")
+        login(request, user)
+        return redirect("/")
+    print("failed")
+    return render(request, 'login.html', {'username': username})
+
+
+@login_required(login_url='login')
+def create_dem_validate(request, num_mo):
+    OF = MO.objects.get(num_MO=num_mo)
+    form: AllForm = AllForm(request.POST, request.FILES)
+    if form.is_valid():
+        abb = form.cleaned_data["id_item"]
+        print(abb)
+        abcd = form.cleaned_data["designation"]
+        abcde = form.cleaned_data["quantity"]
+        abcdef = form.cleaned_data["CNC"]
+        print(abcdef)
+        abcdefg = form.cleaned_data["Router"]
+        abcdefgh = form.cleaned_data["laser_Cutters"]
+        machines = form.cleaned_data["machines"]
+        two_d = form.cleaned_data["two_d"]
+        print(two_d)
+        three_d = form.cleaned_data["three_d"]
+        abcdefgg = form.cleaned_data["milling"]
+        if 1:
+            if 1:
+                print("it was the problem")
+                abc = MO.objects.get(num_MO=num_mo)
+                print(abc)
+
+                objecttt = piece(num_MO=abc, id_item=abb, designation=abcd, quantity=abcde, machines=machines,
+                                 two_d=two_d, three_d=three_d)
+                objecttt.save()
+                print("aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbcccccccccccccc")
+                form = AllForm()
+    else:
+        messages.error(request, "not checked")
+        print("successssssssssssssssssssssssssssss")
+    pieces = piece.objects.filter(num_MO=9)
+    if request.session.has_key('test'):
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        num = request.session['test']
+        if request.POST.get("clear"):
             ref = OF.project_Reference
             projj = project.objects.get(project_Reference=ref)
 
@@ -365,7 +375,6 @@ def create_dem_validate(request, num_mo):
             msg.attach_alternative(msg_html, "text/html")
             msg.send()
 
-
     pieces = piece.objects.filter(num_MO=num_mo)
     page = request.GET.get('page', 1)
     paginator = Paginator(pieces, 10)
@@ -379,8 +388,9 @@ def create_dem_validate(request, num_mo):
     return render(request, 'create_dem_validate.html',
                   {'piece_list': piece_list, 'OFId': num_mo, 'form': form})
 
+
 @login_required(login_url='login')
-def edit_item(request,id_auto):
+def edit_item(request, id_auto):
     item = piece.objects.get(pk=id_auto)
     i = get_object_or_404(piece, pk=id_auto)
     num_mo = i.num_MO
@@ -401,7 +411,7 @@ def edit_item(request,id_auto):
         print(a)
         i = form.save(commit=False)
         i.save()
-        return redirect("http://127.0.0.1:8000/creation/updatee/"+ ref)
+        return redirect("http://127.0.0.1:8000/creation/updatee/" + ref)
     return render(request, 'edit_dem_validate.html', {'item': item, 'form': form})
 
 
@@ -425,98 +435,47 @@ def validation(request, num_mo):
     print(var1)
     mo_form: mo_cause = mo_cause(request.POST, instance=i)
 
-    if request.POST.get("inv_proj"):
-        if mo_form.is_valid():
-            cause = mo_form.cleaned_data["cause_invalid"]
-            i.cause_invalid = cause
-            i.save()
-            subject = 'MO Invalidation'
-            from_email = 'pferadh2021@gmail.com'
-            to_emails = demandeur.email, request.user.email
-            context = {
-                'cause': cause,
-                'num_mo': num_mo,
-                'a': request.user
-                    }
-            msg_html = render_to_string('email.html', context)
+    if mo_form.is_valid():
+        print("pppppppppp")
+        cause = mo_form.cleaned_data["cause_invalid"]
+        print("pooooooooooop")
+        i.cause_invalid = cause
+        i.save()
+        subject = 'MO invalidation'
+        from_email = 'pferadh2021@gmail.com'
+        to = demandeur.email
 
-            msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
-            msg.attach_alternative(msg_html, "text/html")
-            msg.send()
+        context = {
+            'cause': cause,
+            'num_mo': num_mo,
+            'a': request.user,
+            'dem': demandeur,
+        }
+        msg_html = render_to_string('email.html', context)
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
 
-        else:
-            print(mo_form.errors)
-
-    if request.POST.get("inval_eng"):
-        if mo_form.is_valid():
-            cause = mo_form.cleaned_data["cause_invalid"]
-            i.cause_invalid = cause
-            i.save()
-            subject = 'MO Invalidation'
-            from_email = 'pferadh2021@gmail.com'
-            to_emails = demandeur.email, request.user.email
-            context = {
-                'cause': cause,
-                'num_mo': num_mo,
-                'a': request.user
-                    }
-            msg_html = render_to_string('email.html', context)
-
-            msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
-            msg.attach_alternative(msg_html, "text/html")
-            msg.send()
-
-        else:
-            print(mo_form.errors)
-
-    if request.POST.get("inval_prod"):
-        if mo_form.is_valid():
-            cause = mo_form.cleaned_data["cause_invalid"]
-            i.cause_invalid = cause
-            i.save()
-            subject = 'MO Invalidation'
-            from_email = 'pferadh2021@gmail.com'
-            to_emails = demandeur.email, request.user.email
-            context = {
-                'cause': cause,
-                'num_mo': num_mo,
-                'a': request.user
-            }
-            msg_html = render_to_string('email.html', context)
-
-            msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
-            msg.attach_alternative(msg_html, "text/html")
-            msg.send()
-
-        else:
-            print(mo_form.errors)
-
-    if request.POST.get("inval_at"):
-        if mo_form.is_valid():
-            cause = mo_form.cleaned_data["cause_invalid"]
-            i.cause_invalid = cause
-            i.save()
-            subject = 'MO Invalidation'
-            from_email = 'pferadh2021@gmail.com'
-            to_emails = demandeur.email, request.user.email
-            context = {
-                'cause': cause,
-                'num_mo': num_mo,
-                'a': request.user
-            }
-            msg_html = render_to_string('email.html', context)
-
-            msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
-            msg.attach_alternative(msg_html, "text/html")
-            msg.send()
-
-        else:
-            print(mo_form.errors)
+        subject = 'MO invalidation'
+        from_email = 'pferadh2021@gmail.com'
+        to = request.user.email
+        context = {
+            'cause': cause,
+            'num_mo': num_mo,
+            'a': request.user,
+            'dem': demandeur,
+        }
+        msg_html = render_to_string('email_inv.html', context)
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+    else:
+        print(mo_form.errors)
 
     if request.POST.get("validate_proj"):
-        subject = 'MO Invalidation'
+        subject = 'MO Confirmation'
         from_email = 'pferadh2021@gmail.com'
-        to_emails = validation.email, request.user.email
+        to_emails = prod.email, request.user.email
         context = {
             'num_mo': num_mo,
             'a': request.user
@@ -530,9 +489,8 @@ def validation(request, num_mo):
         var.date_val_chefproj = datetime.date.today()
         var.save()
 
-
     if request.POST.get("val_eng"):
-        subject = 'MO Invalidation'
+        subject = 'MO Confirmation'
         from_email = 'pferadh2021@gmail.com'
         to_emails = prod.email, request.user.email
         context = {
@@ -548,9 +506,8 @@ def validation(request, num_mo):
         var.date_val_respval = datetime.date.today()
         var.save()
 
-
     if request.POST.get("val_prod"):
-        subject = 'MO Invalidation'
+        subject = 'MO Confirmation'
         from_email = 'pferadh2021@gmail.com'
         to_emails = atelier.email, request.user.email
         context = {
@@ -566,10 +523,10 @@ def validation(request, num_mo):
         var.date_val_respprod = datetime.date.today()
         var.save()
 
-
     if request.POST.get("val_at"):
-        subject, from_email, to = 'MO Confirmation', 'pferadh2021@gmail.com', request.user.email
-        text_content = 'This is an important message.'
+        subject = 'MO Confirmation'
+        from_email = 'pferadh2021@gmail.com'
+        to = request.user.email
         context = {
             'num_mo': num_mo,
             'a': request.user
@@ -583,19 +540,18 @@ def validation(request, num_mo):
         var.date_val_chefat = datetime.date.today()
         var.save()
 
-
-
-
     return render(request, 'validation_cycle.html',
-                  {'OFId': num_mo, 'proj': ref, 'mo_form': mo_form, 'proj_manager': proj_manager,'demandeur':demandeur, 'var': var})
+                  {'OFId': num_mo, 'proj': ref, 'mo_form': mo_form, 'proj_manager': proj_manager,
+                   'demandeur': demandeur, 'var': var})
 
 
 @login_required(login_url='login')
 def Machines(request):
     return render(request, 'Machines.html')
 
+
 @login_required(login_url='login')
-def print_mo (request, num_mo):
+def print_mo(request, num_mo):
     list = piece.objects.filter(num_MO=num_mo)
     mo = MO.objects.get(num_MO=num_mo)
     ref = mo.project_Reference
@@ -615,5 +571,6 @@ def print_mo (request, num_mo):
         lisst.append(i)
     print(len(lisst))
     date = datetime.date.today().strftime('%d/%m/%Y')
-    return render(request, "print.html",{"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date':date, 'name': name})
-
+    return render(request, "print.html",
+                  {"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date': date,
+                   'name': name})

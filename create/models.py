@@ -1,6 +1,7 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 from django.contrib.auth.models import User
+from simple_history.models import HistoricalRecords
 
 #from viewflow.fields import CompositeKey
 
@@ -37,6 +38,7 @@ class MO (models.Model):
     date_val_chefat = models.DateField(blank=True, null=True)
     cause_invalid = models.TextField()
     project_Reference = models.ForeignKey(project, on_delete=models.CASCADE)
+    history = HistoricalRecords()
     def save(self, *args, **kwargs):
         self.id_auto = MO.objects.all().count() + 1
         super(MO, self).save()
@@ -56,10 +58,10 @@ class piece (models.Model):
     length = models.IntegerField(default=0)
     width = models.IntegerField(default=0)
     thickness = models.IntegerField(default=0)
-    CNC = models.BooleanField()
-    Router = models.BooleanField()
-    laser_Cutters = models.BooleanField()
-    milling = models.BooleanField()
+    CNC = models.BooleanField(null=True)
+    Router = models.BooleanField(null=True)
+    laser_Cutters = models.BooleanField(null=True)
+    milling = models.BooleanField(null=True)
     machine_choices = (
         ('cnc', 'CNC'),
         ('router', 'Router'),

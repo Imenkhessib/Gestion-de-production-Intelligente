@@ -25,7 +25,7 @@ SECRET_KEY = '3bvl_3ij&$+l&6clu^27&(yp9p#j9!1wp2_d@z4jbfdl=is-!m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.20', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'mathfilters',
+    'import_export',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'interfaceOF.urls'
@@ -121,12 +124,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+IMPORT_EXPORT_USE_TRANSACTIONS=True
+
 # SMTP config *************************************************************************************************
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER ="ererere"
-EMAIL_HOST_PASSWORD ="rere"
+EMAIL_HOST_USER ="pferadh2021@gmail.com"
+EMAIL_HOST_PASSWORD ="azertyradhwen1234"
 EMAIL_USE_TLS = True
 
 
