@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    {{ b.form }}
+<button type="submit"> search </button>
+</form>
+
+<table border="1">
+    <tr>
+        <td>
+            index
+        </td>
+        <td>
+            id MO
+        </td>
+
+        <td>
+            history type
+        </td>
+
+        <td>
+            reason
+        </td>
+
+        <td>
+            history user
+        </td>
+    </tr>
+    {% for i in b.qs %}
+    {% if  i.state_MO == "released" %}
+    <tr>
+        <td> {{i.history_id}} </td>
+        <td>
+            {{i.num_MO}}
+        </td>
+        <td>
+            {% if i.history_type == "+" %}
+            add
+            {% elif i.history_type == "-" %}
+            delete
+            {% else %}
+            edit
+            {% endif %}
+        </td>
+        <td>
+            {{i.cause_invalid}}
+        </td>
+        <td>
+            {{i.history_user.first_name}} {{i.history_user.last_name}}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+
+</table>
+
+</body>
+</html>

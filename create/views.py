@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause
 from .models import piece, MO, project
-from .filters import filterr, filterrr
+from .filters import filterr, filterrrr
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -14,7 +14,7 @@ import datetime
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-
+from simple_history.models import pre_create_historical_record
 global fun
 
 
@@ -417,6 +417,7 @@ def edit_item(request, id_auto):
 
 @login_required(login_url='login')
 def validation(request, num_mo):
+
     var = MO.objects.get(num_MO=num_mo)
     demandeur = User.objects.get(id=var.mechanical_engineer.id)
     proj_ref = var.project_Reference
@@ -428,7 +429,7 @@ def validation(request, num_mo):
     ref = ref[16:len(ref)]
     var1 = project.objects.get(project_Reference=ref)
     proj_manager = User.objects.get(id=var1.project_chief.id)
-    validation = User.objects.get(id=4)
+    validation = User.objects.get(id=3)
     prod = User.objects.get(id=5)
     atelier = User.objects.get(id=6)
 
@@ -540,6 +541,46 @@ def validation(request, num_mo):
         var.date_val_chefat = datetime.date.today()
         var.save()
 
+
+        # génération d'un nouveau OF identique à celui au cours de validation
+        new = MO.objects.get(num_MO=num_mo)
+        now = datetime.datetime.now()
+        new.launch_Date=now.strftime("%Y-%m-%d")
+        new.save()
+        # génération d'un nouveau numero
+        jours = now.strftime("%d")
+        mois = now.strftime("%m")
+        year = now.strftime("%Y")
+        final = jours + mois + (year[2:4])
+        num = int_or_0(final)
+        list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
+        index = len(list_OFf)
+        index = str(index)
+        num=str(num)
+        num = num + index
+        num = str(num)
+#####################################################################################################
+        # établir une relation entre les pieces et le nouveau Ordre de fabrication
+        trash = MO.objects.get(num_MO=num_mo)
+        testtt = trash
+        testtt.num_MO = num
+        testtt.state_MO = "released"
+        testtt.launch_Date = now.strftime("%Y-%m-%d")
+        testtt.save()
+
+        pieces_list = piece.objects.filter(num_MO=num_mo)
+        print(len(pieces_list))
+        for nnnnnnnn in pieces_list:
+            nnnnnnnn.num_MO = testtt
+            print(nnnnnnnn.id_auto)
+            nnnnnnnn.save()
+
+        # suppression de l'ancien objet MO
+        egg = MO.objects.get(num_MO=num_mo)
+        print(egg)
+        egg.delete()
+
+
     return render(request, 'validation_cycle.html',
                   {'OFId': num_mo, 'proj': ref, 'mo_form': mo_form, 'proj_manager': proj_manager,
                    'demandeur': demandeur, 'var': var})
@@ -574,3 +615,11 @@ def print_mo(request, num_mo):
     return render(request, "print.html",
                   {"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date': date,
                    'name': name})
+
+def changes_history(request):
+    histories = MO.history.all()
+    b = filterrrr(request.GET, queryset=histories)
+    for i in histories:
+     print(i.history_id, ": ", i.history_type)
+
+    return render(request, "changes_history.html", {"list": histories, 'b':b})

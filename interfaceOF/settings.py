@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'import_export',
     'simple_history',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'interfaceOF.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'C:\Users\administrator.SAMMAUTOMATION\Desktop\Smart platform - Copy190421\interfaceOF\templates'],
+        'DIRS': [r'C:\Users\elhif\Documents\pfe project\templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,10 +84,10 @@ WSGI_APPLICATION = 'interfaceOF.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'newnew',
         'USER': 'postgres',
-        'PASSWORD': 'samm2021',
-        'PORT': '5433',
+        'PASSWORD': '7am7oum2011',
+        'PORT': '5432',
         'HOST': 'localhost',
     }
 }

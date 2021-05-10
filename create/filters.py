@@ -7,6 +7,11 @@ class filterr(django_filters.FilterSet):
         model = MO
         fields = ('project_Reference', 'state_MO')
 
+class filterrrr(django_filters.FilterSet):
+    class Meta:
+        model = MO
+        fields = ('num_MO', 'project_Reference')
+
 
 
 class filterrr(django_filters.FilterSet):
