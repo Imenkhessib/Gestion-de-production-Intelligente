@@ -80,6 +80,12 @@ class Foorm(forms.ModelForm):
 
         }
 
+class form_piece(forms.ModelForm):
+    class Meta:
+        model = piece
+        fields = ('material', 'length', 'width', 'thickness', "scheduled_hours_CNC", "scheduled_hours_Milling", "scheduled_hours_Router", "scheduled_hours_laser_cutters")
+
+
 
 class essai(forms.ModelForm):
     class Meta:

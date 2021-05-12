@@ -74,7 +74,6 @@
 					<h6 class="collapse-header">Manage MO:</h6>
 					<a class="collapse-item" href="{% url 'view_mo' %}">View</a>
 					<a class="collapse-item " href="{% url 'create_dem' %}">Create</a>
-					<a class="collapse-item " href="{% url 'validation' %}">Validation cycle</a>
 
 				</div>
 			</div>
@@ -379,8 +378,9 @@
 								</tr>
 								</thead>
 								<tbody>
+								{% for i in list %}
 								<tr>
-									<td></td>
+									<td>i.id_task</td>
 									<td></td>
 									<td></td>
 									<td></td>
@@ -392,7 +392,7 @@
 
 
 								</tr>
-
+                                {% endfor %}
 								</tbody>
 							</table>
 						</div>

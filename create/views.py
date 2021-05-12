@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause
-from .models import piece, MO, project
+from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause, form_piece
+from .models import piece, MO, project, task
 from .filters import filterr, filterrrr
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
@@ -91,22 +91,6 @@ def creation_dem(request):
         print(proj.project_Reference)
         request.session['proj'] = ref
 
-        # now = datetime.datetime.now()
-        # jours = now.strftime("%d")
-        # mois = now.strftime("%m")
-        # year = now.strftime("%Y")
-        # final = jours + mois + (year[2:4])
-        # print(final)
-        # num_mo = int_or_0(final)
-        # print(num_mo)
-        # list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
-        # index = len(list_OFf) + 1
-        # print(index)
-        # index = str(index)
-        # num_mo=str(num_mo)
-        # num_mo= num_mo + index
-        # num_mo = str(num_mo)
-        # print(num_mo)
         request.session['test'] = num_mo
 
         exemple = MO(project_Reference=proj, num_MO=num_mo, state_MO="waiting for validation",
@@ -251,7 +235,8 @@ def edit_at(request):
 
 
 def Tasks(request):
-    return render(request, 'task_history.html')
+    list = task.objects.all()
+    return render(request, 'task_history.html', {'tasks': list})
 
 
 @login_required(login_url='login')
@@ -414,6 +399,39 @@ def edit_item(request, id_auto):
         return redirect("http://127.0.0.1:8000/creation/updatee/" + ref)
     return render(request, 'edit_dem_validate.html', {'item': item, 'form': form})
 
+
+
+@login_required(login_url='login')
+def edit1_item(request, id_auto):
+    a = str(id_auto)
+    item = piece.objects.get(pk=id_auto)
+    i = get_object_or_404(piece, pk=id_auto)
+    num_mo = i.num_MO
+    ref = str(num_mo)
+    size = len(ref)
+    ref = ref[:size - 1]
+    ref = ref[11:len(ref)]
+    print(ref)
+
+    initial_dict = {
+        "material": item.material,
+        "length": item.length,
+        "width": item.width,
+        "thickness": item.thickness,
+        "scheduled_hours_CNC": item.scheduled_hours_CNC,
+        "scheduled_hours_Milling": item.scheduled_hours_Milling,
+        "scheduled_hours_Router": item.scheduled_hours_Router,
+        "scheduled_hours_cutters": item.scheduled_hours_laser_cutters,
+    }
+    form: form_piece = form_piece(request.POST or None, instance=i, initial=initial_dict)
+    if form.is_valid():
+        i = form.save(commit=False)
+        i.save()
+        return redirect("http://127.0.0.1:8000/creation/atelier/" + ref)
+    print(form.errors)
+
+
+    return render(request, "edit_items.html",{"form": form, "item": item})
 
 @login_required(login_url='login')
 def validation(request, num_mo):

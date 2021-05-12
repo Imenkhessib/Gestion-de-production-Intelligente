@@ -402,7 +402,7 @@
                                     <div>
                                         <div class="col-sm-6">
                                             <label class=" h5 font-weight-bold">Manufacturing Order</label>
-                                            <h1 class="h5 text-gray-900 mb-4"> MO/{{num_MO}} </h1>
+                                            <h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
                                         </div>
                                     </div>
 
@@ -473,16 +473,10 @@
                                                                 class="far fa-eye"></i></button>
                                                     </td>
 
-                                                    <form method="POST" action="">
-                                                        {% csrf_token %}
-                                                        <td><input type="number" name="a"
-                                                                   value="{{items.length}}"></td>
-                                                        <td><input type="number" name="b"
-                                                                   value="{{items.width}}"></td>
-                                                        <td><input type="number" name="c"
-                                                                   value="{{items.thickness}}"></td>
-                                                        <td><input type="text" name="e"
-                                                                   value="{{items.material}}"></td>
+                                                        <td>{{items.length}}</td>
+                                                        <td>{{items.width}}</td>
+                                                        <td>{{items.thickness}}</td>
+                                                        <td>{{items.material}}</td>
                                                         <td>
                                                             <table class="test table table-sm table-stripped table-bordered">
                                                                 <thead>
@@ -492,27 +486,25 @@
                                                                 <td> Milling</td>
                                                                 </thead>
                                                                 <tbody>
-                                                                <td><input type="number" name="f"
-                                                                           value="{{items.scheduled_hours_CNC}}">
+                                                                <td>{{items.scheduled_hours_CNC}}
                                                                 </td>
-                                                                <td><input type="number" name="g"
-                                                                           value="{{items.scheduled_hours_laser_cutters}}">
+                                                                <td>{{items.scheduled_hours_laser_cutters}}
                                                                 </td>
-                                                                <td><input type="number" name="h"
-                                                                           value="{{items.scheduled_hours_Router}}">
+                                                                <td>{{items.scheduled_hours_Router}}
                                                                 </td>
-                                                                <td><input type="number" name="i"
-                                                                           value="{{items.scheduled_hours_Milling}}">
+                                                                <td>{{items.scheduled_hours_Milling}}
                                                                 </td>
                                                                 </tbody>
                                                             </table>
                                                         </td>
-                                                        <input type="hidden" name="d" value="{{items.id_auto}}">
                                                         <td>
-                                                            <button type="submit" class="btn btn-success"><i
-                                                                    class="fas fa-edit"></i></button>
-                                                        </td>
+                                                            <form action="http://127.0.0.1:8000/creation/update1/{{items.id_auto}}">
+                                                        <button type="submit" class="btn btn-success"
+                                                                href="http://127.0.0.1:8000/creation/update1/{{items.id_auto}}"><i
+                                                                class="fas fa-edit"></i></button>
+
                                                     </form>
+                                                        </td>
 
 
                                                 </tr>
