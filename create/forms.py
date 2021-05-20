@@ -80,6 +80,34 @@ class Foorm(forms.ModelForm):
 
         }
 
+class form_piece(forms.ModelForm):
+    class Meta:
+        model = piece
+        fields = ('material', 'length', 'width', 'thickness', "scheduled_hours_CNC", "scheduled_hours_Milling", "scheduled_hours_Router", "scheduled_hours_laser_cutters", "scheduled_hours_Lathe")
+        widgets = {
+            'material': forms.TextInput(
+                attrs={'id': 'material', 'class': "form-control form-control-user", 'type': "text"}),
+            'length': forms.NumberInput(
+                attrs={'id': 'length', 'required': 'True', 'class': "form-control form-control-user"}),
+            'width': forms.NumberInput(
+                attrs={'id': 'width', 'required': 'True','class': "form-control form-control-user"}),
+            'thickness': forms.NumberInput(
+                attrs={'id': 'thick', 'required': 'True', 'class': 'form-control form-control-user'}),
+            'scheduled_hours_CNC': forms.NumberInput(
+                attrs={'id': 'cnc_h','required': 'True', 'class': 'form-control form-control-user'}),
+            'scheduled_hours_Milling': forms.NumberInput(
+                attrs={'id': 'milling_h', 'required': 'True', 'class': 'form-control form-control-user'}),
+            'scheduled_hours_Router': forms.NumberInput(
+                attrs={'id': 'router_h', 'required': 'True', 'class': 'form-control form-control-user'}),
+            'scheduled_hours_laser_cutters': forms.NumberInput(
+                attrs={'id': 'laser_h', 'required': 'True', 'class': 'form-control form-control-user'}
+            ),
+            'scheduled_hours_Lathe': forms.NumberInput(
+                attrs={'id': 'lathe_h', 'required': 'True', 'class': 'form-control form-control-user'}
+            ),
+
+        }
+
 
 class essai(forms.ModelForm):
     class Meta:

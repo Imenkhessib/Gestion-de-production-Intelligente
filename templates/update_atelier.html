@@ -1,5 +1,4 @@
 {% load static %}
-{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>add items tech dep</title>
+    <title>Edit items tech dep</title>
 
     <!-- Custom styles for this page -->
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
@@ -24,8 +23,6 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
 
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/dynamictable.css' %}">
@@ -378,229 +375,164 @@
 
             </nav>
 
+            <!-- the new modal -->
 
-        </div>
+
+            <div class="container">
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
 
 
-        <div class="container">
-            <!-- End of Topbar -->
-
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div>
+                    <div class="card o-hidden border-0 shadow-lg my-5">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
                             <div>
-                                <div class="p-5">
-                                    <div>
-                                        <div class="col-sm-6">
-                                            <label class=" h5 font-weight-bold">Manufacturing Order</label>
-                                            <h1 class="h5 text-gray-900 mb-4"> MO/{{OFId}} </h1>
+                                <div>
+                                    <div class="p-5">
+                                        <div>
+                                            <div class="col-sm-6">
+                                                <label class=" h5 font-weight-bold">Edit item: </label>
+                                                <p class="h5">{{ item.id_item }}</p>
+                                            </div>
                                         </div>
+
+
+                                        <br>
+                                        <!-- edit form -->
+
+                                        <form method="post" class="user" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="form-group row">
+                                                <div class="col-sm-12">
+                                                    <label>Material: </label>
+                                                    {{ form.material }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-4">
+                                                    <label class="form-label">Length (mm): </label>
+                                                    {{ form.length }}
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="form-label">Width (mm): </label>
+                                                    {{ form.width }}
+                                                </div>
+                                                <div class="col-sm-4">
+
+                                                    <label class="form-label">Thickness (mm):
+                                                        &nbsp;&nbsp;&nbsp;</label>
+                                                    {{ form.thickness }}
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                {% if 'cnc' in item.machines %}
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <label class="form-label">Scheduled hours for CNC:
+                                                        &nbsp;&nbsp;&nbsp;</label>
+                                                    {{ form.scheduled_hours_CNC }}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="form-group row">
+                                                {% if 'milling' in item.machines %}
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <label>Scheduled hours for Milling: </label>
+                                                    {{ form.scheduled_hours_Milling }}
+                                                </div>
+                                                {% endif %}
+                                                {% if 'router' in item.machines %}
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <label>Scheduled hours for Router: </label>
+                                                    {{ form.scheduled_hours_Router }}
+                                                </div>
+                                                {% endif %}
+                                                {% if 'laser_cutter' in item.machines %}
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <label>Scheduled hours for Laser cutters: </label>
+                                                    {{ form.scheduled_hours_laser_cutters }}
+                                                </div>
+
+                                                {% endif %}
+                                                {% if 'lathe' in item.machines %}
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <label>Scheduled hours for Lathe: </label>
+                                                    {{ form.scheduled_hours_Lathe }}
+                                                </div>
+
+                                                {% endif %}
+                                            </div>
+                                            <button class="btn btn-success" type="submit">Edit</button>
+                                        </form>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <button class="btn btn-secondary" type="submit" value="submit"
+                                                        name="cancel">Cancel
+                                                </button>
+                                            </form>
+
+                                        </div>
+
+
                                     </div>
-
-                                    <br>
-                                    <!-- table -->
-                                    <div class="container mb-3 mt-3">
-                                        <div class="table-responsive">
-                                            <table class="test table table-striped table-bordered"
-                                                   id="itemstab" style="width : 100%">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">Index</th>
-                                                    <th scope="col">Reference</th>
-                                                    <th scope="col">Designation</th>
-                                                    <th scope="col">Quantity</th>
-                                                    <th scope="col">Qualification</th>
-                                                    <th scope="col">3D plan</th>
-                                                    <th scope="col">2D plan</th>
-                                                    <th scope="col">Length</th>
-                                                    <th scope="col">Width</th>
-                                                    <th scope="col">Thickness</th>
-                                                    <th scope="col">Material</th>
-                                                    <th scope="col">Scheduled hours</th>
-                                                    <th scope="col">Edit</th>
-
-                                                </tr>
-                                                </thead>
-                                                <tbody class="detail">
-
-                                                {% for items in piece_list %}
-                                                <tr> {% with var1=forloop.counter var2=piece_list.number|sub:1 produit=piece_list.number|mul:6 %}
-                                                    {% with p=forloop.counter prod=var2|mul:6%}
-                                                    <td> {{var1|add:prod}} </td>
-                                                    {% endwith %}
-                                                    {% endwith %}
-                                                    <td>{{items.id_item}}</td>
-                                                    <td>{{items.designation}}</td>
-                                                    <td>{{items.quantity}}</td>
-                                                    <td>
-                                                        <table class="test table table-sm table-striped table-bordered">
-                                                            <thead>
-                                                            <th>CNC</th>
-                                                            <th>Laser</th>
-                                                            <th>Router</th>
-                                                            <th>Milling</th>
-                                                            <th>Lathe</th>
-                                                            </thead>
-                                                            <tbody>
-                                                            <td>{% if 'cnc' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
-                                                            </td>
-                                                            <td>{% if 'router' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
-                                                            </td>
-                                                            <td>{% if 'laser_cutter' in items.machines %} &#x2714; {% else %} &#x2716;{% endif %}
-                                                            </td>
-                                                            <td>{% if 'milling' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
-                                                            </td>
-                                                            <td>{% if 'lathe' in items.machines %} &#x2714; {% else %}&#x2716;{% endif %}
-                                                            </td>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                    <td>
-                                                       {% if items.three_d != "" %}
-                                                        <a href="http://127.0.0.1:8000{{items.three_d.url}}"
-                                                       type="button" class="btn btn-primary"><i
-                                                            class="far fa-eye"></i></a>
-                                                        {% else %}
-                                                       <button
-                                                            type="button" class="btn btn-primary" disabled><i
-                                                            class="far fa-eye"></i></button>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>
-                                                         <a href="http://127.0.0.1:8000{{items.two_d.url}}"
-                                                       class="btn btn-primary"><i
-                                                            class="far fa-eye"></i></a>
-                                                    </td>
-
-                                                        <td>{{items.length}}</td>
-                                                        <td>{{items.width}}</td>
-                                                        <td>{{items.thickness}}</td>
-                                                        <td>{{items.material}}</td>
-                                                        <td>
-                                                            <table class="test table table-sm table-stripped table-bordered">
-                                                                <thead>
-                                                                <td> CNC</td>
-                                                                <td> Laser</td>
-                                                                <td> Router</td>
-                                                                <td> Milling</td>
-                                                                </thead>
-                                                                <tbody>
-                                                                <td>{{items.scheduled_hours_CNC}} (h)
-                                                                </td>
-                                                                <td>{{items.scheduled_hours_laser_cutters}} (h)
-                                                                </td>
-                                                                <td>{{items.scheduled_hours_Router}} (h)
-                                                                </td>
-                                                                <td>{{items.scheduled_hours_Milling}} (h)
-                                                                </td>
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
-                                                        <td>
-                                                            <form action="http://127.0.0.1:8000/creation/update1/{{items.id_auto}}">
-                                                        <button type="submit" class="btn btn-success"
-                                                                href="http://127.0.0.1:8000/creation/update1/{{items.id_auto}}"><i
-                                                                class="fas fa-edit"></i></button>
-
-                                                    </form>
-                                                        </td>
-
-
-                                                </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="pagination">
-                                    <span class="step-links">
-                                        {% if piece_list.has_previous %}
-                                           <a href="?page={{ piece_list.previous_page_number }}">previous</a>
-                                        {% endif %}
-
-                                        <span class="current">
-                                            Page {{ piece_list.number }} of {{ piece_list.paginator.num_pages }}.
-                                        </span>
-
-                                       {% if piece_list.has_next %}
-                                            <a href="?page={{ piece_list.next_page_number }}">next</a>
-                                       {% endif %}
-                                    </span>
-                                        </div>
-
-                                    <div class="row">
-                                        <div class="col text-right col-sm-6">
-                                            <button class="btn btn-success btn-icon-split"
-                                                    type="submit"
-                                                    value="Submit"
-                                                    style="width:30%">Confirm
-                                            </button>
-                                        </div>
-                                        <div class="col text-left col-sm-6">
-                                            <button class="btn btn-dark btn-icon-split" type="submit"
-                                                    value="Submit"
-                                                    style="width:30%">Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+                    <!-- Form -->
+
+
                 </div>
-
-
-                <!-- Form -->
-
-
+                <!-- /.container-fluid -->
             </div>
-            <!-- /.container-fluid -->
         </div>
+        <!-- End of Content Wrapper -->
     </div>
-    <!-- End of Content Wrapper -->
-</div>
-<!-- End of Page Wrapper -->
+    <!-- End of Page Wrapper -->
 
-<!-- Bootstrap core JavaScript-->
-<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
-<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
-<script crossorigin="anonymous"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 
-<!-- Bootstrap core JavaScript-->
-<script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
-<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js'%}"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="{% static 'js/sb-admin-2.min.js'%}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js'%}"></script>
 
-<!-- my scripts-->
-<!-- <script src="{% static 'js/popupform.js'%}"></script> -->
-<script src="{% static 'js/dynamtab.js'%}"></script>
+    <!-- my scripts-->
+    <!-- <script src="{% static 'js/popupform.js'%}"></script> -->
+    <script src="{% static 'js/dynamtab.js'%}"></script>
+    <script src="{% static 'js/checkboxedit.js'%}"></script>
 
-<!-- Page level plugins -->
-<script src="{% static 'vendor/datatables/jquery.dataTables.min.js'%}"></script>
-<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js'%}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
 
-<!-- Page level custom scripts -->
-<script src="{% static 'js/demo/datatables-demo.js'%}"></script>
-<!-- <script src="{% static 'js/notnullwarning.js'%}"></script>-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="{% static 'js/demo/datatables-demo.js'%}"></script>
+    <!-- <script src="{% static 'js/notnullwarning.js'%}"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 </div>
 </body>

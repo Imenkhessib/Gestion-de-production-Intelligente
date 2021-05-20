@@ -9,8 +9,12 @@ class filterr(django_filters.FilterSet):
 
 
 
+class filterrrr(django_filters.FilterSet):
+    class Meta:
+        model = MO
+        fields = ('num_MO', 'project_Reference')
+
 class filterrr(django_filters.FilterSet):
     class Meta:
         model = piece
         fields = ('thickness', 'num_MO')
-

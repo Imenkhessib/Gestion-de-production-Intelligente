@@ -22,4 +22,6 @@ urlpatterns = [
     path('print/<int:num_mo>', views.print_mo, name='print'),
     path('updatee/<int:num_mo>', views.create_dem_validate),
     path('updateee/<int:id_auto>', views.edit_item),
+    path('update1/<int:id_auto>', views.edit1_item),
+    path('history1', views.changes_history, name='history'),
 ]

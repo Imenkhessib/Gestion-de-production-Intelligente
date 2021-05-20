@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -26,8 +25,6 @@ SECRET_KEY = '3bvl_3ij&$+l&6clu^27&(yp9p#j9!1wp2_d@z4jbfdl=is-!m'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
 
 # Application definition
 
@@ -61,7 +58,7 @@ ROOT_URLCONF = 'interfaceOF.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'C:\Users\administrator.SAMMAUTOMATION\Desktop\Smart platform - Copy190421\interfaceOF\templates'],
+        'DIRS': [r'C:\Users\administrator.SAMMAUTOMATION\Desktop\Smart platform - 2.2\interfaceOF\templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'interfaceOF.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -90,7 +86,6 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -110,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -124,17 +118,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-IMPORT_EXPORT_USE_TRANSACTIONS=True
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # SMTP config *************************************************************************************************
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+EMAIL_HOST = 'ssl0.ovh.net'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER ="pferadh2021@gmail.com"
-EMAIL_HOST_PASSWORD ="azertyradhwen1234"
-EMAIL_USE_TLS = True
-
-
+EMAIL_HOST_USER = 'informatique@samm_automation.com'
+EMAIL_HOST_PASSWORD = os.environ.get('OVHEMAILPASSWORD')
+DEFAULT_FROM_EMAIL = 'informatique@samm_automation.com'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -146,4 +140,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
-

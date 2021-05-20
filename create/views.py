@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause
+from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause, form_piece
 from .models import piece, MO, project
-from .filters import filterr, filterrr
+from .filters import filterr, filterrrr
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -151,9 +151,9 @@ def creation_dem(request):
         if request.POST.get("clear"):
             projj = project.objects.get(project_Reference=ref)
 
-            subject = 'MO Confirmation'
-            from_email = 'pferadh2021@gmail.com'
-            to_emails = projj.project_chief.email, request.user.email
+            subject = 'MO Validation'
+            from_email = 'informatique@samm_automation.com'
+            to = projj.project_chief.email
 
             newnew = MO.objects.get(num_MO=num_mo)
             newnew.mechanical_engineer = request.user
@@ -166,7 +166,21 @@ def creation_dem(request):
             }
             msg_html = render_to_string('email_valid.html', context)
 
-            msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
+            msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+            msg.attach_alternative(msg_html, "text/html")
+            msg.send()
+
+            subject = 'MO Confirmation'
+            from_email = 'pferadh2021@gmail.com'
+            to = request.user.email
+            print(to)
+
+            context = {
+                'num_mo': num_mo,
+                'a': request.user,
+            }
+            msg_html = render_to_string('email_conf.html', context)
+            msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
             msg.attach_alternative(msg_html, "text/html")
             msg.send()
 
@@ -416,6 +430,66 @@ def edit_item(request, id_auto):
 
 
 @login_required(login_url='login')
+def edit1_item(request, id_auto):
+    a = str(id_auto)
+    item = piece.objects.get(pk=id_auto)
+    i = get_object_or_404(piece, pk=id_auto)
+    num_mo = i.num_MO
+    ref = str(num_mo)
+    size = len(ref)
+    ref = ref[:size - 1]
+    ref = ref[11:len(ref)]
+    m = i.machines
+    mach = str(m)
+    if 'CNC' not in mach:
+        print("test1")
+        i.scheduled_hours_CNC = 0
+    i.save()
+    if 'Router' not in mach:
+        print("test2")
+        i.scheduled_hours_Router = 0
+    i.save()
+    if 'Laser Cutter' not in mach:
+        print("test3")
+        i.scheduled_hours_laser_cutter = 0
+    i.save()
+    if 'Lathe' not in mach:
+        print("test4")
+        i.scheduled_hours_Lathe = 0
+    i.save()
+    if 'Milling' not in mach:
+        print("test5")
+        i.scheduled_hours_Milling = 0
+    i.save()
+
+
+    print(i.scheduled_hours_Router)
+
+    initial_dict = {
+        "material": item.material,
+        "length": item.length,
+        "width": item.width,
+        "thickness": item.thickness,
+        "scheduled_hours_CNC": item.scheduled_hours_CNC,
+        "scheduled_hours_Milling": item.scheduled_hours_Milling,
+        "scheduled_hours_Router": item.scheduled_hours_Router,
+        "scheduled_hours_cutters": item.scheduled_hours_laser_cutters,
+    }
+
+    form: form_piece = form_piece(request.POST or None, instance=i, initial=initial_dict)
+    if form.is_valid():
+        i = form.save(commit=False)
+        i.save()
+        return redirect("http://127.0.0.1:8000/creation/atelier/" + ref)
+    print(form.errors)
+
+    if request.POST.get("cancel"):
+        return redirect("http://127.0.0.1:8000/creation/atelier/" + ref)
+
+    return render(request, "update_atelier.html", {"form": form, "item": item, 'OFId': ref})
+
+
+@login_required(login_url='login')
 def validation(request, num_mo):
     var = MO.objects.get(num_MO=num_mo)
     demandeur = User.objects.get(id=var.mechanical_engineer.id)
@@ -436,13 +510,11 @@ def validation(request, num_mo):
     mo_form: mo_cause = mo_cause(request.POST, instance=i)
 
     if mo_form.is_valid():
-        print("pppppppppp")
         cause = mo_form.cleaned_data["cause_invalid"]
-        print("pooooooooooop")
         i.cause_invalid = cause
         i.save()
         subject = 'MO invalidation'
-        from_email = 'pferadh2021@gmail.com'
+        from_email = 'informatique@samm_automation.com'
         to = demandeur.email
 
         context = {
@@ -457,7 +529,7 @@ def validation(request, num_mo):
         msg.send()
 
         subject = 'MO invalidation'
-        from_email = 'pferadh2021@gmail.com'
+        from_email = 'informatique@samm_automation.com'
         to = request.user.email
         context = {
             'cause': cause,
@@ -474,32 +546,86 @@ def validation(request, num_mo):
 
     if request.POST.get("validate_proj"):
         subject = 'MO Confirmation'
-        from_email = 'pferadh2021@gmail.com'
-        to_emails = prod.email, request.user.email
+        from_email = 'informatique@samm_automation.com'
+        to = request.user.email
         context = {
             'num_mo': num_mo,
             'a': request.user
         }
-        msg_html = render_to_string('email_valid.html', context)
+        msg_html = render_to_string('email_val.html', context)
 
-        msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+        subject = 'MO Validation'
+        from_email = 'informatique@samm_automation.com'
+        to = validation.email
+        context = {
+            'num_mo': num_mo,
+            'a': request.user
+        }
+        msg_html = render_to_string('email_val_by.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
         msg.attach_alternative(msg_html, "text/html")
         msg.send()
 
         var.date_val_chefproj = datetime.date.today()
         var.save()
-
-    if request.POST.get("val_eng"):
+    if request.POST.get("validate_proj"):
         subject = 'MO Confirmation'
-        from_email = 'pferadh2021@gmail.com'
-        to_emails = prod.email, request.user.email
+        from_email = 'informatique@samm_automation.com'
+        to = request.user.email
         context = {
             'num_mo': num_mo,
             'a': request.user
         }
-        msg_html = render_to_string('email_valid.html', context)
+        msg_html = render_to_string('email_val.html', context)
 
-        msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+        subject = 'MO Validation'
+        from_email = 'pferadh2021@gmail.com'
+        to = validation.email
+        context = {
+            'num_mo': num_mo,
+            'a': request.user
+        }
+        msg_html = render_to_string('email_val_by.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+        var.date_val_chefproj = datetime.date.today()
+        var.save()
+    if request.POST.get("val_eng"):
+        subject = 'MO Confirmation'
+        from_email = 'informatique@samm_automation.com'
+        to = request.user.email
+        context = {
+            'num_mo': num_mo,
+            'a': request.user
+        }
+        msg_html = render_to_string('email_val.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+        subject = 'MO Validation'
+        from_email = 'informatique@samm_automation.com'
+        to = prod.email
+        context = {
+            'num_mo': num_mo,
+            'a': request.user
+        }
+        msg_html = render_to_string('email_val_by.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
         msg.attach_alternative(msg_html, "text/html")
         msg.send()
 
@@ -508,15 +634,28 @@ def validation(request, num_mo):
 
     if request.POST.get("val_prod"):
         subject = 'MO Confirmation'
-        from_email = 'pferadh2021@gmail.com'
-        to_emails = atelier.email, request.user.email
+        from_email = 'informatique@samm_automation.com'
+        to = request.user.email
         context = {
             'num_mo': num_mo,
             'a': request.user
         }
-        msg_html = render_to_string('email_valid.html', context)
+        msg_html = render_to_string('email_val.html', context)
 
-        msg = EmailMultiAlternatives(subject, msg_html, from_email, bcc=to_emails)
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+        subject = 'MO Validation'
+        from_email = 'informatique@samm_automation.com'
+        to = atelier.email
+        context = {
+            'num_mo': num_mo,
+            'a': request.user
+        }
+        msg_html = render_to_string('email_val_at.html', context)
+
+        msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
         msg.attach_alternative(msg_html, "text/html")
         msg.send()
 
@@ -525,13 +664,13 @@ def validation(request, num_mo):
 
     if request.POST.get("val_at"):
         subject = 'MO Confirmation'
-        from_email = 'pferadh2021@gmail.com'
+        from_email = 'informatique@samm_automation.com'
         to = request.user.email
         context = {
             'num_mo': num_mo,
             'a': request.user
         }
-        msg_html = render_to_string('email_valid.html', context)
+        msg_html = render_to_string('you_valid.html', context)
 
         msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
         msg.attach_alternative(msg_html, "text/html")
@@ -574,3 +713,12 @@ def print_mo(request, num_mo):
     return render(request, "print.html",
                   {"list": list, "OFId": num_mo, "ref": ref, "lisst": lisst, "nb_pages": nb_pages, 'date': date,
                    'name': name})
+
+
+def changes_history(request):
+    histories = MO.history.all()
+    b = filterrrr(request.GET, queryset=histories)
+    for i in histories:
+        print(i.history_id, ": ", i.history_type)
+
+    return render(request, "changes_history.html", {"list": histories, 'b': b})
