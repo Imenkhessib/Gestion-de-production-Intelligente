@@ -24,7 +24,7 @@ SECRET_KEY = '3bvl_3ij&$+l&6clu^27&(yp9p#j9!1wp2_d@z4jbfdl=is-!m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['samm.automation.com', '127.0.0.1', '192.168.1.20']
 
 # Application definition
 
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'interfaceOF.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'C:\Users\administrator.SAMMAUTOMATION\Desktop\Smart platform - 2.2\interfaceOF\templates'],
+        'DIRS': [r'C:\Users\administrator.SAMMAUTOMATION\Desktop\Smart platform - OF generation and validation and priority\interfaceOF\templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,14 +121,12 @@ USE_TZ = True
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # SMTP config *************************************************************************************************
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
-EMAIL_HOST = 'ssl0.ovh.net'
+EMAIL_HOST = "smtp.office365.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'informatique@samm_automation.com'
-EMAIL_HOST_PASSWORD = os.environ.get('OVHEMAILPASSWORD')
-DEFAULT_FROM_EMAIL = 'informatique@samm_automation.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "n.gdouda@samm-automation.com"
+EMAIL_HOST_PASSWORD = "rihabe123++"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 

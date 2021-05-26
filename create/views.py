@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause, form_piece
-from .models import piece, MO, project
+from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause, form_piece, access_control
+from .models import piece, MO, project, access_control
 from .filters import filterr, filterrrr
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
@@ -151,9 +151,9 @@ def creation_dem(request):
         if request.POST.get("clear"):
             projj = project.objects.get(project_Reference=ref)
 
-            subject = 'MO Validation'
-            from_email = 'informatique@samm_automation.com'
-            to = projj.project_chief.email
+            subject = 'MO Confirmation'
+            from_email = 'n.gdouda@samm-automation.com'
+            to = request.user.email
 
             newnew = MO.objects.get(num_MO=num_mo)
             newnew.mechanical_engineer = request.user
@@ -164,26 +164,30 @@ def creation_dem(request):
                 'num_mo': num_mo,
                 'a': request.user
             }
+            msg_html = render_to_string('email_conf.html', context)
+
+            msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
+            msg.attach_alternative(msg_html, "text/html")
+            msg.send()
+
+            subject = 'MO Validation'
+            from_email = 'n.gdouda@samm-automation.com'
+            to = projj.project_chief.email
+            context = {
+                'num_mo': num_mo,
+                'a': request.user
+            }
             msg_html = render_to_string('email_valid.html', context)
 
             msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
             msg.attach_alternative(msg_html, "text/html")
             msg.send()
 
-            subject = 'MO Confirmation'
-            from_email = 'pferadh2021@gmail.com'
-            to = request.user.email
-            print(to)
-
-            context = {
-                'num_mo': num_mo,
-                'a': request.user,
-            }
-            msg_html = render_to_string('email_conf.html', context)
-            msg = EmailMultiAlternatives(subject, msg_html, from_email, [to])
-            msg.attach_alternative(msg_html, "text/html")
-            msg.send()
-
+            ref = "0"
+            num = "0"
+            request.session['test'] = num
+            request.session['proj'] = ref
+        if request.POST.get("cancel"):
             ref = "0"
             num = "0"
             request.session['test'] = num
@@ -318,15 +322,16 @@ def loginn(request):
     logout(request)
     username = request.POST.get("exampleInputEmail")
     password = request.POST.get("exampleInputPassword")
-    print(username)
-    print(password)
     user = authenticate(request, username=username, password=password)
+
     if user is not None:
         request.session["user_name"] = username
-        print("successssssss")
         login(request, user)
-        return redirect("/")
-    print("failed")
+        return redirect("/accounts/test")
+    ####### if data entered is not none but false ######
+    if username is not None and password is not None:
+        messages.error(request, 'Username or password are not correct.')
+
     return render(request, 'login.html', {'username': username})
 
 
@@ -371,7 +376,7 @@ def create_dem_validate(request, num_mo):
             projj = project.objects.get(project_Reference=ref)
 
             subject = 'MO Confirmation'
-            from_email = 'pferadh2021@gmail.com'
+            from_email = 'n.gdouda@samm-automation.com'
             to_emails = projj.project_chief.email, request.user.email
 
             newnew = MO.objects.get(num_MO=num_mo)
@@ -403,6 +408,7 @@ def create_dem_validate(request, num_mo):
                   {'piece_list': piece_list, 'OFId': num_mo, 'form': form})
 
 
+### edit demandeur ###
 @login_required(login_url='login')
 def edit_item(request, id_auto):
     item = piece.objects.get(pk=id_auto)
@@ -428,6 +434,8 @@ def edit_item(request, id_auto):
         return redirect("http://127.0.0.1:8000/creation/updatee/" + ref)
     return render(request, 'edit_dem_validate.html', {'item': item, 'form': form})
 
+
+##### edit chef atelier for one specific item ####
 
 @login_required(login_url='login')
 def edit1_item(request, id_auto):
@@ -462,7 +470,6 @@ def edit1_item(request, id_auto):
         i.scheduled_hours_Milling = 0
     i.save()
 
-
     print(i.scheduled_hours_Router)
 
     initial_dict = {
@@ -487,6 +494,13 @@ def edit1_item(request, id_auto):
         return redirect("http://127.0.0.1:8000/creation/atelier/" + ref)
 
     return render(request, "update_atelier.html", {"form": form, "item": item, 'OFId': ref})
+
+
+###" cancel button in create dem to delete an mo ####
+def cancel(request, num_mo):
+    Mo = MO.objects.get(num_MO=num_mo)
+    Mo.delete()
+    return redirect('http://127.0.0.1:8000/accounts/test')
 
 
 @login_required(login_url='login')
@@ -514,7 +528,7 @@ def validation(request, num_mo):
         i.cause_invalid = cause
         i.save()
         subject = 'MO invalidation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = demandeur.email
 
         context = {
@@ -529,7 +543,7 @@ def validation(request, num_mo):
         msg.send()
 
         subject = 'MO invalidation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = request.user.email
         context = {
             'cause': cause,
@@ -546,7 +560,7 @@ def validation(request, num_mo):
 
     if request.POST.get("validate_proj"):
         subject = 'MO Confirmation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = request.user.email
         context = {
             'num_mo': num_mo,
@@ -559,7 +573,7 @@ def validation(request, num_mo):
         msg.send()
 
         subject = 'MO Validation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = validation.email
         context = {
             'num_mo': num_mo,
@@ -575,7 +589,7 @@ def validation(request, num_mo):
         var.save()
     if request.POST.get("validate_proj"):
         subject = 'MO Confirmation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = request.user.email
         context = {
             'num_mo': num_mo,
@@ -588,7 +602,7 @@ def validation(request, num_mo):
         msg.send()
 
         subject = 'MO Validation'
-        from_email = 'pferadh2021@gmail.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = validation.email
         context = {
             'num_mo': num_mo,
@@ -604,7 +618,7 @@ def validation(request, num_mo):
         var.save()
     if request.POST.get("val_eng"):
         subject = 'MO Confirmation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = request.user.email
         context = {
             'num_mo': num_mo,
@@ -617,7 +631,7 @@ def validation(request, num_mo):
         msg.send()
 
         subject = 'MO Validation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = prod.email
         context = {
             'num_mo': num_mo,
@@ -634,7 +648,7 @@ def validation(request, num_mo):
 
     if request.POST.get("val_prod"):
         subject = 'MO Confirmation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = request.user.email
         context = {
             'num_mo': num_mo,
@@ -647,7 +661,7 @@ def validation(request, num_mo):
         msg.send()
 
         subject = 'MO Validation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = atelier.email
         context = {
             'num_mo': num_mo,
@@ -664,7 +678,7 @@ def validation(request, num_mo):
 
     if request.POST.get("val_at"):
         subject = 'MO Confirmation'
-        from_email = 'informatique@samm_automation.com'
+        from_email = 'n.gdouda@samm-automation.com'
         to = request.user.email
         context = {
             'num_mo': num_mo,
@@ -678,6 +692,44 @@ def validation(request, num_mo):
 
         var.date_val_chefat = datetime.date.today()
         var.save()
+
+        # génération d'un nouveau OF identique à celui au cours de validation
+        new = MO.objects.get(num_MO=num_mo)
+        now = datetime.datetime.now()
+        new.launch_Date = now.strftime("%Y-%m-%d")
+        new.save()
+        # génération d'un nouveau numero
+        jours = now.strftime("%d")
+        mois = now.strftime("%m")
+        year = now.strftime("%Y")
+        final = jours + mois + (year[2:4])
+        num = int_or_0(final)
+        list_OFf = MO.objects.filter(launch_Date=now.strftime("%Y-%m-%d"))
+        index = len(list_OFf)
+        index = str(index)
+        num = str(num)
+        num = num + index
+        num = str(num)
+        #####################################################################################################
+        # établir une relation entre les pieces et le nouveau Ordre de fabrication
+        trash = MO.objects.get(num_MO=num_mo)
+        testtt = trash
+        testtt.num_MO = num
+        testtt.state_MO = "released"
+        testtt.launch_Date = now.strftime("%Y-%m-%d")
+        testtt.save()
+
+        pieces_list = piece.objects.filter(num_MO=num_mo)
+        print(len(pieces_list))
+        for nnnnnnnn in pieces_list:
+            nnnnnnnn.num_MO = testtt
+            print(nnnnnnnn.id_auto)
+            nnnnnnnn.save()
+
+        # suppression de l'ancien objet MO
+        egg = MO.objects.get(num_MO=num_mo)
+        print(egg)
+        egg.delete()
 
     return render(request, 'validation_cycle.html',
                   {'OFId': num_mo, 'proj': ref, 'mo_form': mo_form, 'proj_manager': proj_manager,
@@ -722,3 +774,28 @@ def changes_history(request):
         print(i.history_id, ": ", i.history_type)
 
     return render(request, "changes_history.html", {"list": histories, 'b': b})
+
+
+def edit_users(request):
+    users = User.objects.all()
+    return render(request, "editusers.html", {"users": users})
+
+
+def edit_mo(request,num_mo):
+
+    return render(request, "edit_mo.html")
+
+
+def edit_users_info(request, id_user):
+    i = get_object_or_404(access_control, id_user=id_user)
+    if i is None:
+        i.id_user = id_user
+        i.save()
+    initial_dict = {
+        "permission_class": i.permission_class,
+    }
+    form: access_control = access_control(request.POST, instance=i, initial=initial_dict)
+    if form.is_valid():
+        permission = form.cleaned_data["two_d"]
+
+    return render(request, "edituserinfo.html", {"id_user": id_user, 'permission': permission})

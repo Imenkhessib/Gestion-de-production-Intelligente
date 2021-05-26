@@ -24,4 +24,8 @@ urlpatterns = [
     path('updateee/<int:id_auto>', views.edit_item),
     path('update1/<int:id_auto>', views.edit1_item),
     path('history1', views.changes_history, name='history'),
+    path('cancel/<int:num_mo>', views.cancel),
+    path('edit_users', views.edit_users, name='edit_users'),
+    path('edit_users_info/<id_user>', views.edit_users_info),
+    path('edit_mo/<num_mo>', views.edit_mo),
 ]
