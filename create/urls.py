@@ -9,7 +9,7 @@ urlpatterns = [
     path('edit_dem', views.edit_dem, name='edit_dem'),
     path('edit_prod', views.edit_prod, name='edit_prod'),
     path('edit_at', views.edit_at, name='edit_at'),
-    path('Tasks', views.Tasks, name='Tasks'),
+    path('Tasks', views.tasks, name='Tasks'),
     path('delete/<int:id_auto>', views.delete, name='delete'),
     path('update/<int:id_auto>', views.update, name='update'),
     path('view_mo', views.view_mo, name='view_mo'),
@@ -24,4 +24,8 @@ urlpatterns = [
     path('updateee/<int:id_auto>', views.edit_item),
     path('update1/<int:id_auto>', views.edit1_item),
     path('history1', views.changes_history),
+    path('Task/finish/<int:id>', views.tache_accomplie),
+    path('Task/affectation/<int:id>', views.affecter_tache),
+    path('Task/end/<int:id>', views.emettre_tache),
+    path('Calcul', views.calcul),
 ]

@@ -1,10 +1,11 @@
 from lib2to3.fixes.fix_input import context
 from django.http import HttpResponseRedirect
+import os
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import AllForm, essai, item_form, formm, register, Foorm, mo_cause, form_piece
-from .models import piece, MO, project, task
+from .models import piece, MO, project, task, p_task
 from .filters import filterr, filterrrr
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth.forms import UserCreationForm
@@ -57,8 +58,137 @@ def creation_at(request, num_MO):
         piece_list = paginator.page(1)
     except EmptyPage:
         piece_list = paginator.page(paginator.num_pages)
+    #     Générer les taches à partir des pièces + qualif
+    if request.POST.get("tasks"):
+            A = task.objects.filter(num_mo=num_MO)
+            A.delete()
+            mo = MO.objects.get(num_MO=num_MO)
+            index = 0
+            for i in piece_list:
+                if "cnc" in i.machines:
+                    pt = p_task()
+                    pt.MO = mo
+                    pt.item = i
+                    pt.qualification = "cnc"
+                    pt.scheduled_hours = i.scheduled_hours_CNC
+                    pt.qte = i.quantity
+                    pt.save()
+                    for j in range(0, i.quantity):
+                     index += 1
+                     task1 = task()
+                     task1.qualification = "cnc"
+                     task1.duration = i.scheduled_hours_CNC / i.quantity
+                     task1.duration *= 60
+                     task1.state_task = "to do"
+                     task1.num_item = i
+                     task1.id_task = index
+                     task1.num_mo = mo
+                     task1.p_task = pt
+                     task1.save()
+                index = 0
+                if "router" in i.machines:
+                    pt = p_task()
+                    pt.MO = mo
+                    pt.item = i
+                    pt.qualification = "cnc"
+                    pt.scheduled_hours = i.scheduled_hours_Router
+                    pt.qte = i.quantity
+                    pt.save()
+
+                    for j in range(0, i.quantity):
+                     index += 1
+                     task1 = task()
+                     task1.qualification = "Router"
+                     task1.duration = i.scheduled_hours_Router / i.quantity
+                     task1.duration *= 60
+                     task1.state_task = "to do"
+                     task1.id_task = index
+                     task1.num_item = i
+                     task1.num_mo = mo
+                     task1.p_task = pt
+                     task1.save()
+                index = 0
+                if "milling" in i.machines:
+                    pt = p_task()
+                    pt.MO = mo
+                    pt.item = i
+                    pt.qualification = "milling"
+                    pt.scheduled_hours = i.scheduled_hours_Milling
+                    pt.qte = i.quantity
+                    pt.save()
+
+                    for j in range(0, i.quantity):
+                     index += 1
+                     task1 = task()
+                     task1.qualification = "milling"
+                     task1.duration = i.scheduled_hours_Milling / i.quantity
+                     task1.duration *= 60
+                     task1.id_task = index
+                     task1.state_task = "to do"
+                     task1.num_mo = mo
+                     task1.num_item = i
+                     task1.p_task = pt
+                     task1.save()
+                index = 0
+                if "lathe" in i.machines:
+                    pt = p_task()
+                    pt.MO = mo
+                    pt.item = i
+                    pt.qualification = "lathe"
+                    pt.scheduled_hours = i.scheduled_hours_lathe
+                    pt.qte = i.quantity
+                    pt.save()
+                    for j in range(0, i.quantity):
+                     index += 1
+                     task1 = task()
+                     task1.qualification = "lathe"
+                     task1.duration = i.scheduled_hours_lathe / i.quantity
+                     task1.duration *= 60
+                     task1.id_task = index
+                     task1.state_task = "to do"
+                     task1.num_item = i
+                     task1.num_mo = mo
+                     task1.p_task = pt
+                     task1.save()
+                     index = 0
+                if "laser_cutter" in i.machines:
+                    pt = p_task()
+                    pt.MO = mo
+                    pt.item = i
+                    pt.qualification = "laser_cutter"
+                    pt.scheduled_hours = i.scheduled_hours_laser_cutters
+                    pt.qte = i.quantity
+                    pt.save()
+
+                    for j in range(0, i.quantity):
+                     index += 1
+                     task1 = task()
+                     task1.qualification = "laser_cutter"
+                     task1.duration = i.scheduled_hours_laser_cutters / i.quantity
+                     task1.duration *= 60
+                     task1.state_task = "to do"
+                     task1.id_task = index
+                     task1.num_item = i
+                     task1.num_mo = mo
+                     task1.p_task = pt
+                     task1.save()
+                     index = 0
     return render(request, 'create_chef_at.html', {'OFId': num_MO, 'items': items, "piece_list": piece_list})
 
+@login_required(login_url='login')
+def calcul(request):
+    pt = p_task.objects.all()
+    for i in pt:
+        c = 0
+        t = task.objects.filter(p_task=i)
+        for j in t:
+            if j.progress_percentage == 100.0:
+                c += 1
+        i.performed_hours = (i.scheduled_hours / i.qte) * c
+        i.remaining_hours = i.scheduled_hours - i.performed_hours
+        i.percentage_progression = (i.performed_hours / i.scheduled_hours) * 100
+        i.save()
+    return render(request, "calcul.html", {"pt": pt})
 
 @login_required(login_url='login')
 def creation_dem(request):
@@ -158,6 +288,11 @@ def creation_dem(request):
             num = "0"
             request.session['test'] = num
             request.session['proj'] = ref
+        if request.POST.get("cancel"):
+            ref = "0"
+            num = "0"
+            request.session['test'] = num
+            request.session['proj'] = ref
         pieces = piece.objects.filter(num_MO=num)
     page = request.GET.get('page', 1)
     paginator = Paginator(pieces, 10)
@@ -168,8 +303,7 @@ def creation_dem(request):
     except EmptyPage:
         piece_list = paginator.page(paginator.num_pages)
 
-    return render(request, 'create_demand.html',
-                  {'formm': formmm, 'piece_list': piece_list, 'OFId': num_mo, 'form': form, 'proj': ref})
+    return render(request, 'create_demand.html', {'formm': formmm, 'piece_list': piece_list, 'OFId': num_mo, 'form': form, 'proj': ref})
 
 
 @login_required(login_url='login')
@@ -202,7 +336,7 @@ def edit_dem(request):
 
     send_mail(
         "radhwen",
-        "a new Manufacturing Order is made by Mr:" + request.user.username + ". please join the link to validate MO number:  " + abc + " \n 192.168.1.101:8000",
+        "a new Manufacturing Order is made by Mr:" + request.user.username + ". please join the link to validate MO number:  " + abc + " \n http://127.0.0.1:8000",
         "elhifradwen14@gmail.com",
         ['mohamedradhouan.elhif@isticbc.org'],
     )
@@ -247,6 +381,65 @@ def delete(request, id_auto):
 
     # return render(request, 'login.html')
     return redirect("/creation")
+
+@login_required(login_url='login')
+def affecter_tache(request, id):
+    task_example = task.objects.get(pk=id)
+    task_example.start_datetime = datetime.datetime.now()
+    task_example.id_user = request.user
+    task_example.state_task = "In Progress"
+    task_example.save()
+
+    # return render(request, 'login.html')
+    return redirect("/creation/Tasks")
+
+@login_required(login_url='login')
+def tache_accomplie(request, id):
+    task_example = task.objects.get(pk=id)
+    task_example.finish_stop_datetime = datetime.datetime.now()
+    task_example.state_task = "Done"
+    task_example.progress_percentage = 100.0
+    task_example.save()
+
+    return redirect("/creation/Tasks")
+
+
+@login_required(login_url='login')
+def emettre_tache(request, id):
+    task_example = task.objects.get(pk=id)
+    task_example.finish_stop_datetime = datetime.datetime.now()
+    task_example.state_task = "On Hold"
+    d = str(task_example.finish_stop_datetime)
+    d = d[:21]
+    print(d)
+    dd = str(task_example.start_datetime)
+    dd = dd[:21]
+    print(dd)
+    d1 = datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S.%f')
+    print(d1)
+    d2 = datetime.datetime.strptime(dd, '%Y-%m-%d %H:%M:%S.%f')
+    print(d2)
+    print(d1 - d2)
+    ddd = d1 - d2
+    ddd = str(ddd)
+    hours = ddd[:1]
+    hours = int(hours)
+    print(hours)
+    minutes = ddd[2 : 4]
+    minutes = int(minutes)
+    print(minutes)
+    seconds = ddd[5:7]
+    seconds = int(seconds)
+    print(seconds)
+    total_min = hours * 60 + minutes + seconds/60
+    print(total_min)
+    task_example.real_duration += total_min
+    task_example.progress_percentage = (task_example.real_duration / task_example.duration)*100
+
+    task_example.save()
+
+    # return render(request, 'login.html')
+    return redirect("/creation/Tasks")
 
 
 @login_required(login_url='login')
@@ -641,3 +834,9 @@ def changes_history(request):
      print(i.history_id, ": ", i.history_type)
 
     return render(request, "changes_history.html", {"list": histories, 'b':b})
+
+def tasks(request):
+    A = task.objects.all()
+    passs = os.environ.get('mail_pass')
+    print(passs)
+    return render(request, "tasks.html", {"A":A})

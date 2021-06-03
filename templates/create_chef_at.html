@@ -530,11 +530,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col text-right col-sm-6">
-                                            <button class="btn btn-success btn-icon-split"
-                                                    type="submit"
-                                                    value="Submit"
-                                                    style="width:30%">Confirm
-                                            </button>
+                                            <form method="POST">
+                                                {% csrf_token %}
+
+                                                <button type="submit" class="btn btn-success"
+                                                        value="Submit" name="tasks"> Confirm
+                                                </button>
+
+                                            </form>
                                         </div>
                                         <div class="col text-left col-sm-6">
                                             <button class="btn btn-dark btn-icon-split" type="submit"

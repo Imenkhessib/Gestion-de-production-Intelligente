@@ -366,71 +366,31 @@
 							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 								<thead>
 								<tr>
-									<th>Index</th>
-									<th>MO reference</th>
-									<th>State</th>
+									<th>MO</th>
 									<th>Item</th>
 									<th>Priority</th>
-									<th>Qualification</th>
-									<th>% Complete</th>
-									<th>Scheduled time</th>
-									<th>Performed time</th>
-									<th>Start task</th>
-									<th>Interrupt task</th>
-									<th>Finish task</th>
+									<th>scheduled hours</th>
+									<th>Performed hours</th>
+									<th>Remaining hours</th>
+									<th> Progress </th>
+									<th>Quantity</th>
 								</tr>
 								</thead>
 								<tbody>
-								{% for i in A %}
-								{% if i.state_task != "Done" %}
+								{% for i in pt %}
 								<tr>
-									<td>{{i.id_task}}</td>
-									<td>{{i.num_mo}}</td>
-									<td>{{i.state_task}}</td>
-									<td>{{i.num_item}}</td>
-									<td>{{i.priority_task}}</td>
-									<td>{{i.qualification}}</td>
-									<td>{{i.progress_percentage}}</td>
-									<td>{{i.duration}}</td>
-									<td> {{i.real_duration}}</td>
-									<td>
-										{% if i.state_task != "In Progress" %}
-										<form action="/creation/Task/affectation/{{i.id}}">
-											<button class="btn btn-primary" type="submit">Select</button>
-										</form>
-										{% else %}
-										<form action="/creation/Task/affectation/{{i.id}}">
-											<button class="btn btn-primary" type="submit" disabled>Select</button>
-										</form>
-									{% endif %}
-									</td>
-									<td>
-										{% if i.state_task == "In Progress" and i.id_user == request.user %}
-										<form action="/creation/Task/end/{{i.id}}">
-											<button class="btn btn-danger" type="submit">Interrupt</button>
-										</form>
-										{% else %}
-										<form action="/creation/Task/affectation/{{i.id}}">
-											<button class="btn btn-danger" type="submit" disabled>Interrupt</button>
-										</form>
-                                        {% endif %}
-									</td>
+									<td>{{i.MO}}</td>
+									<td>{{i.item}}</td>
+									<td>{{i.priority}}</td>
+									<td>{{i.scheduled_hours}}</td>
+									<td>{{i.performed_hours}}</td>
+									<td>{{i.remaining_hours}}</td>
+									<td>{{i.percentage_progression}}</td>
+									<td>{{i.qte}}</td>
 
-									<td>
-										{% if i.state_task == "In Progress" and i.id_user == request.user %}
-										<form action="/creation/Task/finish/{{i.id}}">
-											<button class="btn btn-success" type="submit">Finish</button>
-										</form>
-										{% else %}
-										<form action="/creation/Task/affectation/{{i.id}}">
-											<button class="btn btn-success" type="submit" disabled>Finish</button>
-										</form>
-									{% endif %}
-									</td>
 
 
 								</tr>
-								{% endif %}
                                 {% endfor %}
 								</tbody>
 							</table>

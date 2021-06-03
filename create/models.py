@@ -74,6 +74,7 @@ class piece (models.Model):
     scheduled_hours_Router = models.IntegerField(default=0, null=True, blank=True)
     scheduled_hours_Milling = models.IntegerField(default=0, null=True, blank=True)
     scheduled_hours_laser_cutters = models.IntegerField(default=0, null=True, blank=True)
+    scheduled_hours_lathe = models.IntegerField(default=0, null=True, blank=True)
     two_d = models.FileField(null=True, blank=True)
     three_d = models.FileField(null=True, blank=True)
 
@@ -92,17 +93,33 @@ class machine(models.Model):
     state_machine = models.CharField(max_length=50)
     designation = models.CharField(max_length=50)
 
+class p_task(models.Model):
+    MO = models.ForeignKey(MO, on_delete=models.CASCADE)
+    item = models.ForeignKey(piece, on_delete=models.CASCADE)
+    qualification = models.CharField(max_length=50)
+    priority = models.IntegerField(default=0)
+    scheduled_hours = models.IntegerField(default=0)
+    performed_hours = models.FloatField(default=0.0)
+    remaining_hours = models.FloatField(default=0.0)
+    percentage_progression = models.FloatField(default=0.0)
+    qte = models.IntegerField(default=0)
+
 class task(models.Model):
     id_task = models.CharField(max_length=50)
     state_task = models.CharField(max_length=50)
     qualification = models.CharField(max_length=50)
-    duration = models.IntegerField(default=0)
+    duration = models.FloatField(default=0.0)
+    real_duration = models.FloatField(default=0.0)
     priority_task = models.IntegerField(default=0)
     start_datetime = models.DateTimeField(null=True)
     finish_stop_datetime = models.DateTimeField(null=True)
     progress_percentage = models.FloatField(default=0.0)
-    num_item = models.ForeignKey(piece, on_delete=models.CASCADE, default="1555")
-    id_machine = models.ForeignKey(machine, on_delete=models.CASCADE)
+    num_item = models.ForeignKey(piece, on_delete=models.CASCADE, null=True)
+    id_machine = models.ForeignKey(machine, on_delete=models.CASCADE, null=True)
+    num_mo = models.ForeignKey(MO, on_delete=models.CASCADE, default="3")
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    p_task = models.ForeignKey(p_task, on_delete=models.CASCADE, null=True)
+
 
 class user (models.Model):
     id = models.CharField(max_length=50, primary_key=True)
